@@ -45,11 +45,32 @@ jobs:
           git fetch origin gh-pages 2>/dev/null || true
           git checkout gh-pages 2>/dev/null || git checkout --orphan gh-pages
 
-          cp index.html /tmp/index.html
-          git rm -rf . --quiet 2>/dev/null || true
-          cp /tmp/index.html index.html
+          # Preserve archive/ from gh-pages, copy new files
+          mkdir -p /tmp/archive_backup
+          cp archive/*.html /tmp/archive_backup/ 2>/dev/null || true
 
-          git add index.html
+          cp index.html /tmp/index.html
+          cp archive/${DATE}.html /tmp/archive_new.html
+
+          git rm -rf . --quiet 2>/dev/null || true
+
+          cp /tmp/index.html index.html
+          mkdir -p archive
+          cp /tmp/archive_backup/*.html archive/ 2>/dev/null || true
+          cp /tmp/archive_new.html archive/${DATE}.html
+
+          # Keep only the 14 most recent archives
+          ls -t archive/*.html 2>/dev/null | tail -n +15 | xargs rm -f 2>/dev/null || true
+
+          # Generate archive/index.json
+          python3 -c "
+          import json, os, glob
+          files = sorted(glob.glob('archive/*.html'), reverse=True)
+          dates = [os.path.basename(f).replace('.html', '') for f in files]
+          print(json.dumps(dates))
+          " > archive/index.json
+
+          git add index.html archive/
           if git diff --cached --quiet; then
             echo "No changes"
           else
