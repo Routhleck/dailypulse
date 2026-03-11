@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>DailyPulse · 2026年03月11日</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>const ARCHIVE_BASE = "archive";</script>
+
+<style>
+  :root {
+    --bg-body: #F3F4F6;
+    --bg-card: #FFFFFF;
+    --text-primary: #1F2937;
+    --text-summary: #4B5563;
+    --text-meta: #6B7280;
+    --accent: #2563EB;
+    --border-color: #E5E7EB;
+    --header-bg: #1e1b4b;
+    --header-gradient: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --font-serif: "Noto Serif SC", serif;
+    --font-sans: "Inter", -apple-system, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-body: #111827;
+      --bg-card: #1F2937;
+      --text-primary: #F9FAFB;
+      --text-summary: #9CA3AF;
+      --text-meta: #9CA3AF;
+      --accent: #60A5FA;
+      --border-color: #374151;
+      --header-bg: #0f172a;
+      --header-gradient: linear-gradient(to right, #0f172a, #1e293b);
+      --shadow-card: none;
+      --shadow-hover: 0 0 0 1px var(--accent);
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg-body);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    font-size: 15px;
+    padding-bottom: 40px;
+  }
+
+  /* --- Header --- */
+  .site-header {
+    background: var(--header-gradient);
+    color: #fff;
+    padding: 2.5rem 1rem 5rem;
+    text-align: center;
+    clip-path: ellipse(120% 100% at 50% 0%);
+    margin-bottom: 0;
+  }
+  .site-header .brand {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+  }
+  .site-header h1 {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    margin-bottom: 0.8rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .date-badge {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(4px);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: inline-block;
+  }
+  .back-link {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(4px);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+  }
+  .back-link:hover { background: rgba(255,255,255,0.25); }
+
+  /* --- History Dropdown --- */
+  .history-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .history-btn {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(4px);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.2s;
+  }
+  .history-btn:hover { background: rgba(255,255,255,0.25); }
+  .history-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    min-width: 160px;
+    z-index: 200;
+    overflow: hidden;
+  }
+  .history-menu.open { display: block; }
+  .history-menu a {
+    display: block;
+    padding: 10px 16px;
+    color: #1F2937;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.15s;
+  }
+  .history-menu a:hover { background: #F3F4F6; }
+  .history-menu .loading {
+    padding: 10px 16px;
+    color: #6B7280;
+    font-size: 0.85rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    .history-menu { background: #1F2937; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .history-menu a { color: #F9FAFB; }
+    .history-menu a:hover { background: #374151; }
+  }
+
+  /* --- Layout Wrapper --- */
+  .layout-container {
+    max-width: 1000px;
+    margin: -50px auto 0;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 30px;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* --- Sidebar (Desktop) --- */
+  .sidebar {
+    position: sticky;
+    top: 20px;
+    align-self: start;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+  }
+  .sidebar-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-meta);
+    margin-bottom: 12px;
+    padding-left: 8px;
+    text-transform: uppercase;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    color: var(--text-summary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+  }
+  .nav-link:hover { background: var(--bg-body); color: var(--text-primary); }
+  .layout-container:not(.mobile-mode) .nav-link.active {
+    background: #eff6ff;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  @media (prefers-color-scheme: dark) {
+    .layout-container:not(.mobile-mode) .nav-link.active { background: #1e293b; }
+  }
+
+  /* --- Main Content Area --- */
+  #main-content {
+    min-width: 0;
+    padding-top: 60px;
+  }
+  .section {
+    background: transparent;
+    margin-bottom: 50px;
+    scroll-margin-top: 20px;
+  }
+  .section-header h2 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+    line-height: 1.3;
+  }
+
+  /* --- Article Cards --- */
+  .article-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s;
+  }
+  .article-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--accent);
+  }
+  .article-title {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    color: var(--text-primary);
+  }
+  .article-title a { text-decoration: none; color: inherit; }
+  .article-summary {
+    font-size: 0.95rem;
+    color: var(--text-summary);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 0.75rem;
+  }
+  .meta-pill {
+    background: var(--bg-body);
+    color: var(--text-meta);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+  }
+  .article-content {
+    border-left: 3px solid var(--accent);
+    padding-left: 14px;
+    margin-top: 12px;
+    font-size: 1rem;
+    color: var(--text-primary);
+    line-height: 1.7;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-meta);
+    margin-top: 40px;
+  }
+
+  /* --- MOBILE OPTIMIZATION --- */
+  @media (max-width: 768px) {
+    .layout-container {
+      display: block;
+      margin-top: -30px;
+      padding: 0;
+    }
+    .site-header {
+        padding-bottom: 4rem;
+        clip-path: none;
+    }
+    .sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        margin: 0;
+        padding: 0;
+        overflow-x: auto;
+        white-space: nowrap;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    @media (prefers-color-scheme: dark) {
+        .sidebar { background: rgba(31, 41, 55, 0.98); }
+    }
+    .sidebar::-webkit-scrollbar { display: none; }
+    .sidebar-title { display: none; }
+    .sidebar nav {
+        display: flex;
+        padding: 0 16px;
+    }
+    .nav-link {
+        display: inline-block;
+        padding: 14px 16px;
+        margin: 0;
+        font-size: 0.9rem;
+        background: transparent !important;
+        border-radius: 0;
+        color: var(--text-summary);
+        border-bottom: 2px solid transparent;
+        flex-shrink: 0;
+    }
+    .nav-link.active {
+        color: var(--accent) !important;
+        border-bottom-color: var(--accent);
+        font-weight: 600;
+        background: transparent !important;
+    }
+    #main-content {
+        padding: 20px 16px;
+        background: var(--bg-body);
+        min-height: 60vh;
+    }
+    .section {
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+    .section.active-tab {
+        display: block;
+    }
+    .section-header h2 {
+        font-size: 1.3rem;
+        margin-top: 0;
+        padding-top: 0;
+    }
+    .article-card {
+        padding: 16px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">DailyPulse</div>
+  <h1>🌍 国际时事日报</h1>
+  <div class="header-meta">
+    <div class="date-badge">📅 2026年03月11日</div>
+    
+    <div class="history-dropdown">
+      <button class="history-btn" id="history-btn">📂 历史 ▾</button>
+      <div class="history-menu" id="history-menu">
+        <div class="loading">加载中...</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout-container" id="layout-container">
+  <aside class="sidebar">
+    <div class="sidebar-title">板块导航</div>
+    <nav id="sidebar-nav"></nav>
+  </aside>
+
+  <main id="main-content"></main>
+</div>
+
+<footer>
+  Generated by DailyPulse AI · 2026-03-11
+</footer>
+
+<div id="raw-content" style="display:none"><h1>国际时事日报: 2026-03-11</h1>
+<p><strong>日期:</strong> 2026-03-11
+<strong>生成时间:</strong> 14:13
+<strong>数据源:</strong> BBC · Reuters · AP · SCMP · Guardian · FT · NHK · Yonhap · Al Jazeera · VOA中文 · RFI中文 · BBC中文</p>
+<hr />
+<h2>🏛️ 国际政治与外交 (International Politics &amp; Diplomacy)</h2>
+<h3>1. <a href="https://www.bbc.com/news/articles/cly093xxlzzo?at_medium=RSS&amp;at_campaign=rss">油价飙升之际，计划创纪录释放紧急石油储备</a></h3>
+<p><em>Record release of emergency oil reserves planned as prices surge</em>
+📰 BBC World News | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>七国集团欢迎释放石油储备的提议，以应对自美国和以色列与伊朗爆发战争以来油价的飙升。</p>
+</blockquote>
+<h3>2. <a href="https://www.bbc.com/news/articles/ckg1eqw30l9o?at_medium=RSS&amp;at_campaign=rss">乌克兰称击中了俄罗斯“导弹零部件”工厂。</a></h3>
+<p><em>Ukraine says it has hit Russian 'missile component' plant</em>
+📰 BBC World News | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>俄罗斯表示，此次袭击波及了平民，且如果没有英国的帮助，袭击就不可能</p>
+</blockquote>
+<h3>3. <a href="https://www.bbc.com/news/articles/cdjm7rxjxneo?at_medium=RSS&amp;at_campaign=rss">杰弗里·爱泼斯坦有两名关键助手——为何他们至今仍掌控着他的金钱与秘密？</a></h3>
+<p><em>Jeffrey Epstein had two key aides - why do they still control his money and secrets?</em>
+📰 BBC World News | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>理查德·卡恩和达伦·因代克负责管理爱泼斯坦的遗产——</p>
+</blockquote>
+<h3>4. <a href="https://www.bbc.com/news/articles/c5y4wdlyy9xo?at_medium=RSS&amp;at_campaign=rss">瑞士大巴起火致至少六人死亡</a></h3>
+<p><em>At least six dead in Switzerland bus fire</em>
+📰 BBC World News | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>警方目前尚不清楚弗里堡州西部这起火灾的起火原因，火灾还造成多人受伤。</p>
+</blockquote>
+<h3>5. <a href="https://www.bbc.com/news/articles/c93j2492d0do?at_medium=RSS&amp;at_campaign=rss">获澳大利亚庇护的伊朗足球代表团成员改变主意</a></h3>
+<p><em>Member of Iranian football delegation granted Australian asylum changes her mind</em>
+📰 BBC World News | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>部长表示，七名获得签证的女性中有一人在与队友交谈后改变了决定。</p>
+</blockquote>
+<h3>6. <a href="https://www.aljazeera.com/features/2026/3/11/nothing-changes-four-decades-in-power-congos-nguesso-seeks-a-new-term?traffic_source=rss">“一切如旧”：执政四十载，刚果总统恩格索寻求连任</a></h3>
+<p><em>‘Nothing changes’: Four decades in power, Congo’s Nguesso seeks a new term</em>
+📰 Al Jazeera | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>布拉柴维尔的稳定是民主制度逐步巩固的结果，还是精心安排的政治延续？</p>
+</blockquote>
+<h3>7. <a href="https://www.aljazeera.com/video/newsfeed/2026/3/11/what-happened-in-ukraine-missile-attack-in-russias-bryansk?traffic_source=rss">乌克兰导弹袭击俄罗斯布良斯克州：发生了什么？</a></h3>
+<p><em>What happened in Ukraine missile attack in Russia’s Bryansk?</em>
+📰 Al Jazeera | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>据当地官员称，乌克兰对俄罗斯布良斯克发动的导弹袭击造成6名平民死亡，另有37人受伤。</p>
+</blockquote>
+<h3>8. <a href="https://www.aljazeera.com/sports/2026/3/11/iran-cannot-participate-in-the-fifa-world-cup-sports-minister-says?traffic_source=rss">体育部长表示，伊朗无法参加国际足联世界杯。</a></h3>
+<p><em>Iran cannot participate in the FIFA World Cup, sports minister says</em>
+📰 Al Jazeera | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>伊朗表示，在美以袭击导致其最高领袖身亡后，其“在任何情况下”都不会参与。</p>
+</blockquote>
+<h3>9. <a href="https://www.aljazeera.com/video/newsfeed/2026/3/11/funeral-held-for-top-iranian-commanders-killed-in-us-israeli-strikes?traffic_source=rss">伊朗为在美以袭击中丧生的高级指挥官举行葬礼。</a></h3>
+<p><em>Funeral held for top Iranian commanders killed in US-Israeli strikes</em>
+📰 Al Jazeera | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>数千民众聚集在德黑兰，悼念在美以袭击中丧生的伊朗军方高官。</p>
+</blockquote>
+<h3>10. <a href="https://www.aljazeera.com/news/2026/3/11/attacks-from-all-sides-why-iraq-was-dragged-into-us-israel-war-on-iran?traffic_source=rss">四面受敌：伊拉克为何被卷入美以对伊朗的战争</a></h3>
+<p><em>Attacks from all sides: Why Iraq was dragged into US-Israel war on Iran</em>
+📰 Al Jazeera | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>伊拉克遭到了冲突双方的袭击：一方是伊朗及其代理人，另一方是美国。</p>
+</blockquote>
+<h2>💹 经济与金融 (Economics &amp; Markets)</h2>
+<h3>1. <a href="https://www.ft.com/content/61088b66-8e53-4536-9245-d8557be708d9">文件将显示，曼德尔森的离职金约为7万英镑。</a></h3>
+<p><em>Mandelson pay-off was about £70,000, documents will show</em>
+📰 FT World Economy | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>首批与其担任驻华盛顿大使一职有关的文件可能会令基尔·斯塔默政府难堪。</p>
+</blockquote>
+<h3>2. <a href="https://www.ft.com/content/e318bd2c-256c-45b0-8613-d261e7f39855">利润丰厚的私募股权薪酬制度面临挑战。</a></h3>
+<p><em>The lucrative private equity pay scheme under challenge</em>
+📰 FT World Economy | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>股东正对一种奖励创始人的争议性金融工程手段发起挑战。</p>
+</blockquote>
+<h3>3. <a href="https://www.ft.com/content/3333f30c-2d70-41b8-91f3-27f350abacc3">武器销售激增，莱茵金属投资者将获得丰厚分红。</a></h3>
+<p><em>Rheinmetall investors to get bumper dividend from booming arms sales</em>
+📰 FT World Economy | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>德国防务集团已成为乌克兰战争中最大的企业赢家之一。</p>
+</blockquote>
+<h3>4. <a href="https://www.ft.com/content/ffc35d71-2596-4472-9332-1fcaa123eeae">日本将因担忧伊朗战争而“率先行动”释放石油储备。</a></h3>
+<p><em>Japan to ‘act first’ to release oil reserves over Iran war fears</em>
+📰 FT World Economy | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>高市早苗首相采取行动，旨在缓解对中东能源依赖程度“极高</p>
+</blockquote>
+<h3>5. <a href="https://www.ft.com/content/d975940e-6f91-4365-8704-0c1fa41efbb3">法拉奇忘了自己想治理哪个国家</a></h3>
+<p><em>Farage forgets which country he aims to govern</em>
+📰 FT World Economy | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>在国内外政策上，英国右翼的软肋在于其对美国的崇拜。</p>
+</blockquote>
+<h3>6. <a href="https://www.bloomberg.com/news/articles/2026-03-11/raizen-creditors-agree-to-restructure-debt-out-of-court">Raízen达成126亿美元债务庭外重组协议</a></h3>
+<p><em>Raízen Inks Deal to Rework $12.6 Billion Debt Out of Court</em>
+📰 Bloomberg Markets | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>由壳牌（Shell Plc）和Cosan SA共同拥有的陷入困境的巴西糖和乙醇生产商Raízen SA，已与债权人达成一项价值约650亿雷亚尔（126亿美元）的重组协议。</p>
+</blockquote>
+<h3>7. <a href="https://www.bloomberg.com/news/articles/2026-03-11/iea-confirms-huge-release-of-emergency-oil-stockpiles">国际能源署确认大规模释放紧急石油储备</a></h3>
+<p><em>IEA Confirms Huge Release of Emergency Oil Stockpiles</em>
+📰 Bloomberg Markets | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>国际能源署批准了其有史以来最大规模的紧急石油储备释放，因各国政府正寻求遏制由中东战争引发的能源价格飙升。</p>
+</blockquote>
+<h3>8. <a href="https://www.bloomberg.com/news/articles/2026-03-11/amazon-starts-record-eight-part-euro-bond-sale-to-fund-ai-goals">亚马逊发行145亿欧元债券，筹资规模创纪录。</a></h3>
+<p><em>Amazon Is Raising a Record €14.5 Billion From Euro Bond Sale</em>
+📰 Bloomberg Markets | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>亚马逊公司在其欧元债券市场首秀中筹集了145亿欧元（约</p>
+</blockquote>
+<h2>⚔️ 军事与安全 (Military &amp; Security)</h2>
+<h3>1. <a href="https://www.defensenews.com/news/your-military/2026/03/11/amid-us-military-actions-white-house-struggles-to-explain-how-iran-war-will-end/">在美国采取军事行动之际，白宫难以解释对伊战争将如何结束。</a></h3>
+<p><em>Amid US military actions, White House struggles to explain how Iran war will end</em>
+📰 Defense News | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>国防部长皮特·海格塞斯周二告诉记者，战争是处于“开始、</p>
+</blockquote>
+<h3>2. <a href="https://www.defensenews.com/global/asia-pacific/2026/03/11/japan-shrugs-off-gcap-delays-fast-tracks-export-rules-for-future-warplane/">日本淡化GCAP延期影响，加速推进未来战机出口规则修订。</a></h3>
+<p><em>Japan shrugs off GCAP delays, fast-tracks export rules for future warplane</em>
+📰 Defense News | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>据报道，成本已增至三倍，但尚不清楚高市早苗首相领导下的日本政府是否会追加今年的预算。</p>
+</blockquote>
+<h3>3. <a href="https://www.defensenews.com/global/asia-pacific/2026/03/11/australia-deploys-early-warning-aircraft-to-the-middle-east-amid-iran-attacks/">澳大利亚在伊朗发动袭击之际向中东部署预警机。</a></h3>
+<p><em>Australia deploys early-warning aircraft to the Middle East amid Iran attacks</em>
+📰 Defense News | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>澳大利亚领导人表示，该国不会在以色列和美国的作战行动中扮演主角。</p>
+</blockquote>
+<h3>4. <a href="https://www.defensenews.com/space/2026/03/10/us-space-force-clears-design-milestone-advances-missile-warning-constellation/">美国太空军通过设计里程碑，推进导弹预警星座建设</a></h3>
+<p><em>US Space Force clears design milestone, advances missile-warning constellation</em>
+📰 Defense News | 📅 Tue, 10 Mar 2026</p>
+<blockquote>
+<p>System Delta 84 与 BAE 系统公司太空与任务系统部合作，在合同授予九个月后实现了这一里程碑。</p>
+</blockquote>
+<h3>5. <a href="https://www.defensenews.com/news/your-military/2026/03/10/trumps-sons-invest-in-companies-vying-to-fill-gaps-in-us-drone-industry/">特朗普之子投资旨在填补美国无人机行业空白的公司。</a></h3>
+<p><em>Trump’s sons invest in companies vying to fill gaps in US drone industry</em>
+📰 Defense News | 📅 Tue, 10 Mar 2026</p>
+<blockquote>
+<p>特朗普的长子们正支持一家美国无人机生产公司，该公司旨在向五角大楼出售其技术。</p>
+</blockquote>
+<h3>6. <a href="https://www.aljazeera.com/features/2026/3/11/nothing-changes-four-decades-in-power-congos-nguesso-seeks-a-new-term?traffic_source=rss">“一切如旧”：执政四十载，刚果总统恩格索寻求连任</a></h3>
+<p><em>‘Nothing changes’: Four decades in power, Congo’s Nguesso seeks a new term</em>
+📰 Al Jazeera | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>布拉柴维尔的稳定是民主逐步巩固的结果，还是精心安排的政治延续？</p>
+</blockquote>
+<h3>7. <a href="https://www.aljazeera.com/video/newsfeed/2026/3/11/what-happened-in-ukraine-missile-attack-in-russias-bryansk?traffic_source=rss">乌克兰导弹袭击俄罗斯布良斯克：发生了什么？</a></h3>
+<p><em>What happened in Ukraine missile attack in Russia’s Bryansk?</em>
+📰 Al Jazeera | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>据当地官员称，乌克兰对俄罗斯布良斯克的导弹袭击造成6名平民死亡，另有37人受伤。</p>
+</blockquote>
+<h3>8. <a href="https://www.aljazeera.com/sports/2026/3/11/iran-cannot-participate-in-the-fifa-world-cup-sports-minister-says?traffic_source=rss">体育部长表示，伊朗无法参加国际足联世界杯。</a></h3>
+<p><em>Iran cannot participate in the FIFA World Cup, sports minister says</em>
+📰 Al Jazeera | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>伊朗表示，在导致其最高领袖身亡的美以袭击发生后，其“在任何情况下”都不会参加。</p>
+</blockquote>
+<h2>🌱 社会与人文 (Society &amp; Humanitarian)</h2>
+<h3>1. <a href="https://www.theguardian.com/world/2026/mar/11/nigerian-soldiers-killed-jihadist-raids-north-east">尼日利亚东北部遭圣战分子袭击，至少65名士兵丧生。</a></h3>
+<p><em>At least 65 Nigerian soldiers killed in jihadist raids in country’s north-east</em>
+📰 The Guardian World | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>据报道，“伊斯兰国西非省”的武装分子攻占了四个军事基地，并</p>
+</blockquote>
+<h3>2. <a href="https://www.theguardian.com/world/2026/mar/11/drone-attack-goma-eastern-democratic-republic-of-the-congo-m23-rebels">M23叛军称，刚果（金）东部发生无人机袭击，造成三人死亡，其中包括一名法国援助人员。</a></h3>
+<p><em>French aid worker among three killed in drone attack in eastern DRC, M23 rebels say</em>
+📰 The Guardian World | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>M23叛军指责政府袭击其控制的戈马市住宅区</p>
+</blockquote>
+<p>周三</p>
+<h3>3. <a href="https://www.theguardian.com/us-news/2026/mar/11/rfk-vaccine-trials-guinea-bissau">专家担心非洲“不道德”疫苗试验是小罗伯特·肯尼迪领导下美国研究的“原型”</a></h3>
+<p><em>Experts fear ‘unethical’ vaccine trial in Africa is ‘prototype’ for US studies under RFK Jr</em>
+📰 The Guardian World | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p><p>其关于疫苗效果的研究受到质疑的丹麦研究人员正处于美国疫苗政策的核心</p>
+</blockquote>
+<h3>4. <a href="https://www.theguardian.com/global-development/2026/mar/11/prison-sentences-attacked-gay-men-hope-kenya-lgbtq-community">袭击男同性恋者的两人被判入狱，被誉为肯尼亚LGBTQ+群体的希望之兆。</a></h3>
+<p><em>Prison sentences for pair who attacked gay men hailed as sign of hope for Kenya’s LGBTQ+ community</em>
+📰 The Guardian World | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>在该东非国家，针对同性恋者的攻击日益增加，两名犯罪分子因暴力抢</p>
+</blockquote>
+<h3>5. <a href="https://www.theguardian.com/travel/2026/mar/10/principe-africa-villagers-to-be-paid-protect-ecosystem-african-galapagos">被誉为“非洲加拉帕戈斯”的普林西比岛村民将因保护生态系统而获得报酬。</a></h3>
+<p><em>Villagers on Príncipe, the ‘African Galapagos’, to be paid for protecting the ecosystem</em>
+📰 The Guardian World | 📅 Tue, 10 Mar 2026</p>
+<blockquote>
+<p><p>一位亿万富翁正在西非的一座岛屿上资助一个可持续发展</p>
+</blockquote>
+<h3>6. <a href="https://news.un.org/feed/view/en/story/2026/03/1167113">中东实时报道 3月11日：安理会开会之际，平民伤亡人数上升，地区动荡蔓延</a></h3>
+<p><em>MIDDLE EAST LIVE 11 March: Civilian toll rises, regional disruption spreads as Security Council meets</em>
+📰 UN News | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>随着中东冲突继续波及整个地区，联合国安理会今日举行会议讨论不断升级的</p>
+</blockquote>
+<h3>7. <a href="https://news.un.org/feed/view/en/story/2026/03/1167111">令人担忧：三分之二的儿童表示网络欺凌现象有所增加。</a></h3>
+<p><em>An ‘alarming’ two-thirds of children say cyberbullying has increased</em>
+📰 UN News | 📅 Tue, 10 Mar 2026</p>
+<blockquote>
+<p>根据联合国负责消除针对儿童暴力行为的高级官员最近开展的一项民意调查，</p>
+</blockquote>
+<h3>8. <a href="https://news.un.org/feed/view/en/story/2026/03/1167112">世界新闻简报：图尔克呼吁南苏丹停火、乌克兰遭袭</a></h3>
+<p><em>World News in Brief: Türk’s South Sudan ceasefire call, Ukraine strikes, Gaza food alert, Afghan returnees</em>
+📰 UN News | 📅 Tue, 10 Mar 2026</p>
+<blockquote>
+<p>联合国人权事务高级专员沃尔克·图尔克周二谴责了有关南苏</p>
+</blockquote>
+<h2>🌏 亚洲焦点 (Asia Focus)</h2>
+<h3>1. <a href="https://www.scmp.com/news/china/military/article/3346258/how-irans-strikes-us-bases-could-offer-preview-asia-pacific?utm_source=rss_feed">伊朗对美军基地的袭击如何为亚太地区提供预演</a></h3>
+<p><em>How Iran’s strikes on US bases could offer a preview for the Asia-Pacific</em>
+📰 SCMP China | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>ining Sentence 2:* "为了报复美国和以色列自2月28日以来</p>
+</blockquote>
+<h3>2. <a href="https://www.scmp.com/news/china/diplomacy/article/3346261/inauguration-day-chiles-new-president-inherits-chinese-cable-scandal-and-us-threats?utm_source=rss_feed">智利新总统在就职当天接手了中国电缆丑闻和美国的威胁。</a></h3>
+<p><em>On inauguration day, Chile’s new president inherits a Chinese cable scandal and US threats</em>
+📰 SCMP China | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>智利首都圣地亚哥在周三醒来时，笼罩在喜</p>
+</blockquote>
+<h3>3. <a href="https://www.scmp.com/business/banking-finance/article/3346260/eli-lilly-boosts-china-footprint-us3-billion-plan-expand-supply-chain?utm_source=rss_feed">礼来斥资30亿美元扩大供应链，深化在华布局。</a></h3>
+<p><em>Eli Lilly boosts China footprint with US$3 billion plan to expand supply chain</em>
+📰 SCMP China | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>礼来公司承诺在未来十年内向中国追加30亿美元投资，以加强其</p>
+</blockquote>
+<h3>4. <a href="https://www.scmp.com/news/china/military/article/3346254/china-warns-us-against-granting-ai-ability-determine-life-and-death-battlefield?utm_source=rss_feed">中国警告美国，反对赋予人工智能在战场上“决定生死”的能力。</a></h3>
+<p><em>China warns US against granting AI ability to ‘determine life and death’ on battlefield</em>
+📰 SCMP China | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>中国军方周三警告美国，不要允许人工智能（AI）在战争中“决定生死”。</p>
+</blockquote>
+<h3>5. <a href="https://www.scmp.com/news/china/science/article/3346200/chinese-firm-claims-it-intercepted-b-2-radio-signal-during-us-strike-iran?utm_source=rss_feed">中国公司称在美军空袭伊朗期间截获B-2无线电信号。</a></h3>
+<p><em>Chinese firm claims it intercepted B-2 radio signal during US strike on Iran</em>
+📰 SCMP China | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>一家为中国人民解放军提供情报搜集服务的中国私营公司声称，拦截了</p>
+</blockquote>
+<h3>6. <a href="https://www.scmp.com/week-asia/economics/article/3346262/asias-energy-reliant-economies-face-existential-threat-prolonged-iran-war?utm_source=rss_feed">亚洲能源依赖型经济体面临伊朗战争长期化带来的“生存威胁”</a></h3>
+<p><em>Asia’s energy-reliant economies face ‘existential threat’ from prolonged Iran war</em>
+📰 SCMP Asia | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>依赖能源进口的亚洲经济体不仅在为油价飙升做准备，还在应对伊朗</p>
+</blockquote>
+<h3>7. <a href="https://www.scmp.com/news/asia/east-asia/article/3346250/japan-release-oil-reserves-early-monday?utm_source=rss_feed">日本最快将于周一释放石油储备。</a></h3>
+<p><em>Japan to release oil reserves as early as Monday</em>
+📰 SCMP Asia | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>日本首相高市早苗表示，日本最早将于周一释放战略石油储备。这是</p>
+</blockquote>
+<h3>8. <a href="https://www.scmp.com/week-asia/economics/article/3346245/malaysia-tightens-borders-fight-fuel-smuggling-amid-global-energy-crisis?utm_source=rss_feed">全球能源危机背景下，马来西亚加强边境管控以打击燃油走私。</a></h3>
+<p><em>Malaysia tightens borders to fight fuel smuggling amid global energy crisis</em>
+📰 SCMP Asia | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>马来西亚将加强边境执法，以遏制燃料走私并维持补贴汽油价格</p>
+</blockquote>
+<h3>9. <a href="https://www.scmp.com/news/asia/southeast-asia/article/3346242/thai-navy-says-cargo-ship-attacked-near-strait-hormuz?utm_source=rss_feed">泰国海军称一艘货轮在霍尔木兹海峡附近遭到袭击。</a></h3>
+<p><em>Thai navy says cargo ship attacked near Strait of Hormuz</em>
+📰 SCMP Asia | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>泰国海军表示，一艘在关键的霍尔木兹海峡航行的泰国散</p>
+</blockquote>
+<h3>10. <a href="https://www.scmp.com/week-asia/people/article/3346240/japans-so-handsome-youngest-governor-36-sets-social-media-abuzz-again?utm_source=rss_feed">日本36岁“高颜值”最年轻知事再次引发社交媒体热议</a></h3>
+<p><em>Japan’s ‘so handsome’ youngest governor, 36, sets social media abuzz again</em>
+📰 SCMP Asia | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>36岁的福井县知事石田隆土在县议会发布新的Instagram动态后</p>
+</blockquote>
+<h2>📖 深度分析 (Analysis &amp; Opinion)</h2>
+<h3>1. <a href="https://www.foreignaffairs.com/iran/curse-middle-sized-wars">中等规模战争的诅咒</a></h3>
+<p><em>The Curse of Middle-Sized Wars</em>
+📰 Foreign Affairs | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>在伊朗问题上，特朗普面临陷入熟悉陷阱的风险。</p>
+</blockquote>
+<h3>2. <a href="https://www.foreignaffairs.com/united-states/americas-endangered-ai">岌岌可危的美国人工智能</a></h3>
+<p><em>America’s Endangered AI</em>
+📰 Foreign Affairs | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>网络防御薄弱如何威胁美国的科技主导地位。</p>
+</blockquote>
+<h3>3. <a href="https://www.foreignaffairs.com/iran/irans-drone-advantage">伊朗的无人机优势</a></h3>
+<p><em>Iran’s Drone Advantage</em>
+📰 Foreign Affairs | 📅 Wed, 11 Mar 2026</p>
+<blockquote>
+<p>五角大楼模仿了德黑兰的技术，但仍难以赶上。</p>
+</blockquote>
+<h3>4. <a href="https://www.economist.com/international/2026/03/10/india-has-much-to-lose-from-a-world-in-chaos">动荡的世界将使印度损失惨重。</a></h3>
+<p><em>India has much to lose from a world in chaos</em>
+📰 The Economist | 📅 Tue, 10 Mar 2026</p>
+<blockquote>
+<p>不久前，印度在应对捉摸不定的美国时还自鸣得意。如今已非</p>
+</blockquote>
+<h3>5. <a href="https://www.economist.com/international/2026/03/06/can-ukraine-help-defeat-irans-drone-swarms">乌克兰能否助力击败伊朗的无人机蜂群？</a></h3>
+<p><em>Can Ukraine help defeat Iran’s drone swarms?</em>
+📰 The Economist | 📅 Fri, 06 Mar 2026</p>
+<blockquote>
+<p>数以千计的“沙希德”无人机正倾泻在海湾地区。</p>
+</blockquote>
+<hr />
+<p><em>报告由 DailyPulse 自动生成</em></p></div>
+
+<script>
+(function() {
+  // --- History Dropdown ---
+  const histBtn = document.getElementById('history-btn');
+  const histMenu = document.getElementById('history-menu');
+  let histLoaded = false;
+
+  histBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    histMenu.classList.toggle('open');
+    if (histMenu.classList.contains('open') && !histLoaded) {
+      histLoaded = true;
+      fetch(ARCHIVE_BASE + '/index.json')
+        .then(r => r.json())
+        .then(dates => {
+          histMenu.innerHTML = '';
+          if (!dates || dates.length === 0) {
+            histMenu.innerHTML = '<div class="loading">暂无历史</div>';
+            return;
+          }
+          dates.forEach(d => {
+            const a = document.createElement('a');
+            a.href = ARCHIVE_BASE + '/' + d + '.html';
+            a.textContent = d;
+            histMenu.appendChild(a);
+          });
+        })
+        .catch(() => {
+          histMenu.innerHTML = '<div class="loading">加载失败</div>';
+        });
+    }
+  });
+
+  document.addEventListener('click', function() {
+    histMenu.classList.remove('open');
+  });
+
+  // --- Main Content Rendering ---
+  const raw = document.getElementById('raw-content');
+  const main = document.getElementById('main-content');
+  const nav = document.getElementById('sidebar-nav');
+  const layout = document.getElementById('layout-container');
+
+  const isMobile = window.innerWidth <= 768;
+  if(isMobile) {
+      layout.classList.add('mobile-mode');
+  }
+
+  const labelMap = {
+    '🏛': '政治外交', '💹': '经济金融', '⚔': '军事安全',
+    '🌱': '社会人文', '🌏': '亚洲焦点', '📖': '深度分析'
+  };
+
+  function getShortLabel(text) {
+    for (const [emoji, label] of Object.entries(labelMap)) {
+      if (text.includes(emoji)) return emoji + ' ' + label;
+    }
+    return text.replace(/<[^>]+>/g, '').trim().slice(0, 8);
+  }
+
+  const nodes = Array.from(raw.childNodes);
+  let currentSection = null;
+  const sections = [];
+
+  nodes.forEach(node => {
+    if (node.nodeType !== 1) return;
+    if (node.tagName === 'H2') {
+      currentSection = { title: node.innerHTML, articles: [] };
+      sections.push(currentSection);
+    } else if (node.tagName === 'H3' && currentSection) {
+      currentSection.articles.push({ title: node, elements: [] });
+    } else if (currentSection && currentSection.articles.length > 0) {
+      currentSection.articles[currentSection.articles.length - 1].elements.push(node);
+    }
+  });
+
+  sections.forEach((sec, idx) => {
+    const secID = 'sec-' + idx;
+    const sectionEl = document.createElement('div');
+    sectionEl.className = 'section';
+    sectionEl.id = secID;
+
+    const headerEl = document.createElement('div');
+    headerEl.className = 'section-header';
+    headerEl.innerHTML = `<h2>${sec.title}</h2>`;
+    sectionEl.appendChild(headerEl);
+
+    sec.articles.forEach(art => {
+      const card = document.createElement('div');
+      card.className = 'article-card';
+
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'article-title';
+      titleDiv.innerHTML = art.title.innerHTML;
+      card.appendChild(titleDiv);
+
+      art.elements.forEach(el => {
+        const text = el.textContent.trim();
+        if (el.tagName === 'BLOCKQUOTE') {
+          const contentDiv = document.createElement('div');
+          contentDiv.className = 'article-content';
+          contentDiv.innerHTML = el.innerHTML;
+          card.appendChild(contentDiv);
+        } else if (text.includes('BBC') || text.includes('📅') || text.includes('📰')) {
+          const metaDiv = document.createElement('div');
+          metaDiv.className = 'article-meta';
+          const parts = text.split('|');
+          parts.forEach(p => {
+            const pill = document.createElement('span');
+            pill.className = 'meta-pill';
+            pill.innerHTML = p.trim();
+            metaDiv.appendChild(pill);
+          });
+          card.appendChild(metaDiv);
+        } else if (text.length > 0) {
+          const summaryDiv = document.createElement('div');
+          summaryDiv.className = 'article-summary';
+          summaryDiv.innerHTML = el.innerHTML;
+          card.appendChild(summaryDiv);
+        }
+      });
+      sectionEl.appendChild(card);
+    });
+
+    main.appendChild(sectionEl);
+
+    const link = document.createElement('a');
+    link.href = isMobile ? 'javascript:void(0)' : '#' + secID;
+    link.className = 'nav-link';
+    link.innerHTML = getShortLabel(sec.title);
+    link.dataset.target = secID;
+
+    link.onclick = (e) => {
+        if(isMobile) {
+            e.preventDefault();
+            switchTab(secID);
+        } else {
+            e.preventDefault();
+            document.getElementById(secID).scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+    nav.appendChild(link);
+  });
+
+  const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+  const sectionEls = Array.from(document.querySelectorAll('.section'));
+
+  function switchTab(targetId) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const activeLink = navLinks.find(l => l.dataset.target === targetId);
+      if(activeLink) {
+          activeLink.classList.add('active');
+          activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+      sectionEls.forEach(el => {
+          if (el.id === targetId) {
+              el.classList.add('active-tab');
+          } else {
+              el.classList.remove('active-tab');
+          }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (isMobile) {
+      if(sectionEls.length > 0) {
+          switchTab(sectionEls[0].id);
+      }
+  } else {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navLinks.forEach(l => l.classList.remove('active'));
+            const activeLink = navLinks.find(l => l.dataset.target === entry.target.id);
+            if (activeLink) activeLink.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-10% 0px -80% 0px' });
+      sectionEls.forEach(el => observer.observe(el));
+      if(navLinks.length > 0) navLinks[0].classList.add('active');
+  }
+
+})();
+</script>
+
+</body>
+</html>
