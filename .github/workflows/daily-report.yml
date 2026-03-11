@@ -11,6 +11,12 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout engine
@@ -33,47 +39,39 @@ jobs:
           LLM_TRANSLATE_MODEL: ${{ vars.LLM_TRANSLATE_MODEL }}
         run: python run_mission.py
 
-
-      - name: Publish to GitHub Pages
+      - name: Build Pages
         run: |
           DATE=$(date -u +%Y-%m-%d)
           python scripts/generate_pages.py
 
-          git config user.name "Intel Bot"
-          git config user.email "bot@intel-briefing.com"
-
+          # Fetch existing archives from gh-pages
+          mkdir -p /tmp/pages/archive
           git fetch origin gh-pages 2>/dev/null || true
-          git checkout gh-pages 2>/dev/null || git checkout --orphan gh-pages
+          git show origin/gh-pages:archive/index.json > /tmp/pages/archive/index.json 2>/dev/null || true
+          for f in $(git ls-tree --name-only origin/gh-pages:archive/ 2>/dev/null | grep '\.html$'); do
+            git show origin/gh-pages:archive/$f > /tmp/pages/archive/$f 2>/dev/null || true
+          done
 
-          # Preserve archive/ from gh-pages, copy new files
-          mkdir -p /tmp/archive_backup
-          cp archive/*.html /tmp/archive_backup/ 2>/dev/null || true
+          # Copy new files
+          cp index.html /tmp/pages/index.html
+          cp archive/${DATE}.html /tmp/pages/archive/${DATE}.html
 
-          cp index.html /tmp/index.html
-          cp archive/${DATE}.html /tmp/archive_new.html
+          # Keep only 14 most recent archives
+          ls -t /tmp/pages/archive/*.html 2>/dev/null | tail -n +15 | xargs rm -f 2>/dev/null || true
 
-          git rm -rf . --quiet 2>/dev/null || true
-
-          cp /tmp/index.html index.html
-          mkdir -p archive
-          cp /tmp/archive_backup/*.html archive/ 2>/dev/null || true
-          cp /tmp/archive_new.html archive/${DATE}.html
-
-          # Keep only the 14 most recent archives
-          ls -t archive/*.html 2>/dev/null | tail -n +15 | xargs rm -f 2>/dev/null || true
-
-          # Generate archive/index.json
+          # Regenerate index.json
           python3 -c "
           import json, os, glob
-          files = sorted(glob.glob('archive/*.html'), reverse=True)
+          files = sorted(glob.glob('/tmp/pages/archive/*.html'), reverse=True)
           dates = [os.path.basename(f).replace('.html', '') for f in files]
           print(json.dumps(dates))
-          " > archive/index.json
+          " > /tmp/pages/archive/index.json
 
-          git add index.html archive/
-          if git diff --cached --quiet; then
-            echo "No changes"
-          else
-            git commit -m "pages: update daily report ${DATE}"
-            git push origin gh-pages
-          fi
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/pages
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
