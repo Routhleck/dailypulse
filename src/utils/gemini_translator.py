@@ -43,6 +43,7 @@ def _chat(prompt: str, max_tokens: int = 1024, model: str = None) -> str:
             result = data["choices"][0]["message"]["content"]
             if result:
                 return result.strip()
+            logger.warning(f"LLM returned empty content (attempt {attempt + 1}/{GEMINI_MAX_RETRIES}), finish_reason={data['choices'][0].get('finish_reason')}")
             if attempt < GEMINI_MAX_RETRIES - 1:
                 time.sleep(2 ** attempt)
         except (httpx.HTTPError, httpx.TimeoutException, KeyError, IndexError) as e:
@@ -113,9 +114,9 @@ def summarize_section(titles_and_summaries: list[str], section_name: str) -> str
     if not LLM_API_KEY or not titles_and_summaries:
         return ""
     content = "\n".join(f"- {t}" for t in titles_and_summaries)
-    prompt = f"""以下是今日{section_name}板块的新闻条目：
+    prompt = f"""以下是今日{section_name}板块的新闻标题与摘要：
 
 {content}
 
-请用2-3句话总结今日该板块的整体动态和核心趋势，语言简洁，直接输出总结，不要加标题或前缀。"""
+请作为新闻编辑，用2-3句话客观概括今日该板块的整体动态与主要议题，语言简洁中立，直接输出内容，不要加标题或前缀。"""
     return _chat(prompt, max_tokens=512)
