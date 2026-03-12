@@ -126,7 +126,7 @@ def _render_section(items, limit, translations, section_key, section_summary="")
             meta += f" | 📅 {pub_date}"
         lines.append(meta)
         if display_summary:
-            lines.append(f"> {display_summary}")
+            lines.append(f"> {' '.join(display_summary.split())}")
         lines.append("")
 
     return lines
