@@ -99,7 +99,8 @@ def _render_section(items, limit, translations, section_key, section_summary="")
         return lines
 
     if section_summary:
-        lines.append(f"> 📊 **板块速览：** {section_summary}")
+        summary_oneline = " ".join(section_summary.split())
+        lines.append(f"> 📊 **板块速览：** {summary_oneline}")
         lines.append("")
 
     for i, item in enumerate(items[:limit], 1):
