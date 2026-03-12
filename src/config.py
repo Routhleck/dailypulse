@@ -41,6 +41,8 @@ LLM_MODEL = os.getenv("LLM_MODEL", "gemini-2.5-flash-lite")
 LLM_TRANSLATE = os.getenv("LLM_TRANSLATE", "false").lower() == "true"
 # LLM_TRANSLATE_MODEL: separate lite model for translation (falls back to LLM_MODEL)
 LLM_TRANSLATE_MODEL = os.getenv("LLM_TRANSLATE_MODEL") or LLM_MODEL
+# LLM_SUMMARY_MODEL: model for section summaries (falls back to LLM_MODEL)
+LLM_SUMMARY_MODEL = os.getenv("LLM_SUMMARY_MODEL") or LLM_MODEL
 
 # Backwards-compat alias
 GEMINI_API_KEY = LLM_API_KEY
@@ -49,7 +51,7 @@ JINA_READER_URL = "https://r.jina.ai/"
 
 # --- Timeouts (seconds) ---
 DEFAULT_TIMEOUT = 15
-GEMINI_TIMEOUT = 60
+GEMINI_TIMEOUT = 120
 JINA_TIMEOUT = 30
 
 # --- Content Limits ---

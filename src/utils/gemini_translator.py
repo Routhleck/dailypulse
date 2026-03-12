@@ -13,9 +13,9 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
 try:
-    from config import LLM_API_KEY, LLM_BASE_URL, LLM_TRANSLATE, LLM_TRANSLATE_MODEL, GEMINI_TIMEOUT, GEMINI_MAX_RETRIES
+    from config import LLM_API_KEY, LLM_BASE_URL, LLM_TRANSLATE, LLM_TRANSLATE_MODEL, LLM_SUMMARY_MODEL, GEMINI_TIMEOUT, GEMINI_MAX_RETRIES
 except ImportError:
-    from src.config import LLM_API_KEY, LLM_BASE_URL, LLM_TRANSLATE, LLM_TRANSLATE_MODEL, GEMINI_TIMEOUT, GEMINI_MAX_RETRIES
+    from src.config import LLM_API_KEY, LLM_BASE_URL, LLM_TRANSLATE, LLM_TRANSLATE_MODEL, LLM_SUMMARY_MODEL, GEMINI_TIMEOUT, GEMINI_MAX_RETRIES
 
 # Backwards-compat: keep GEMINI_API_KEY alias for any external callers
 GEMINI_API_KEY = LLM_API_KEY
@@ -119,4 +119,4 @@ def summarize_section(titles_and_summaries: list[str], section_name: str) -> str
 {content}
 
 请作为新闻编辑，用2-3句话客观概括今日该板块的整体动态与主要议题，语言简洁中立，直接输出内容，不要加标题或前缀。"""
-    return _chat(prompt, max_tokens=512)
+    return _chat(prompt, max_tokens=512, model=LLM_SUMMARY_MODEL)

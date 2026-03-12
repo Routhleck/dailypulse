@@ -37,6 +37,7 @@ jobs:
           LLM_MODEL: ${{ vars.LLM_MODEL }}
           LLM_TRANSLATE: ${{ vars.LLM_TRANSLATE }}
           LLM_TRANSLATE_MODEL: ${{ vars.LLM_TRANSLATE_MODEL }}
+          LLM_SUMMARY_MODEL: ${{ vars.LLM_SUMMARY_MODEL }}
         run: python run_mission.py
 
       - name: Build Pages
