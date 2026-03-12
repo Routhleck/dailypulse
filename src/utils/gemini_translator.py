@@ -13,9 +13,9 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
 try:
-    from config import LLM_API_KEY, LLM_BASE_URL, LLM_TRANSLATE, LLM_TRANSLATE_MODEL, LLM_MODEL, GEMINI_TIMEOUT, GEMINI_MAX_RETRIES
+    from config import LLM_API_KEY, LLM_BASE_URL, LLM_TRANSLATE, LLM_TRANSLATE_MODEL, GEMINI_TIMEOUT, GEMINI_MAX_RETRIES
 except ImportError:
-    from src.config import LLM_API_KEY, LLM_BASE_URL, LLM_TRANSLATE, LLM_TRANSLATE_MODEL, LLM_MODEL, GEMINI_TIMEOUT, GEMINI_MAX_RETRIES
+    from src.config import LLM_API_KEY, LLM_BASE_URL, LLM_TRANSLATE, LLM_TRANSLATE_MODEL, GEMINI_TIMEOUT, GEMINI_MAX_RETRIES
 
 # Backwards-compat: keep GEMINI_API_KEY alias for any external callers
 GEMINI_API_KEY = LLM_API_KEY
