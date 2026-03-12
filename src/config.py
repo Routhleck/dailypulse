@@ -63,7 +63,7 @@ GEMINI_DETAIL_MAX_TOKENS = 1024
 
 # --- Rate Limiting ---
 GEMINI_RATE_LIMIT_DELAY = 1.5  # seconds between LLM API calls
-GEMINI_MAX_RETRIES = 3
+GEMINI_MAX_RETRIES = 5
 
 # --- RSS Fetch Limits ---
 RSS_FETCH_TIMEOUT = 10

@@ -49,7 +49,7 @@ def _chat(prompt: str, max_tokens: int = 1024, model: str = None) -> str:
         except (httpx.HTTPError, httpx.TimeoutException, KeyError, IndexError) as e:
             if attempt < GEMINI_MAX_RETRIES - 1:
                 logger.warning(f"LLM call failed ({attempt + 1}/{GEMINI_MAX_RETRIES}): {e}")
-                time.sleep(2 ** attempt)
+                time.sleep(3)
             else:
                 logger.error(f"LLM call ultimately failed: {e}")
     return ""
