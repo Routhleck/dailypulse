@@ -118,4 +118,4 @@ def summarize_section(titles_and_summaries: list[str], section_name: str) -> str
 {content}
 
 请用2-3句话总结今日该板块的整体动态和核心趋势，语言简洁，直接输出总结，不要加标题或前缀。"""
-    return _chat(prompt, max_tokens=256)
+    return _chat(prompt, max_tokens=512)
