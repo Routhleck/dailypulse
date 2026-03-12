@@ -97,10 +97,10 @@ page = f"""<!DOCTYPE html>
   .site-header {{
     background: var(--header-gradient);
     color: #fff;
-    padding: 2.5rem 1rem 5rem;
+    padding: 2.5rem 1rem 3.25rem;
     text-align: center;
     clip-path: ellipse(120% 100% at 50% 0%);
-    margin-bottom: 0;
+    margin-bottom: 8px;
     position: relative;
     z-index: 20;
   }}
@@ -202,13 +202,13 @@ page = f"""<!DOCTYPE html>
   /* --- Layout Wrapper --- */
   .layout-container {{
     max-width: 1000px;
-    margin: -50px auto 0;
+    margin: 16px auto 0;
     padding: 0 20px;
     display: grid;
     grid-template-columns: 220px 1fr;
     gap: 30px;
     position: relative;
-    z-index: 10;
+    z-index: 30;
   }}
 
   /* --- Sidebar (Desktop) --- */
@@ -255,7 +255,7 @@ page = f"""<!DOCTYPE html>
   /* --- Main Content Area --- */
   #main-content {{
     min-width: 0;
-    padding-top: 60px;
+    padding-top: 0;
   }}
   .section {{
     background: transparent;
@@ -378,16 +378,16 @@ page = f"""<!DOCTYPE html>
   @media (max-width: 768px) {{
     .layout-container {{
       display: block;
-      margin-top: -30px;
+      margin-top: 0;
       padding: 0;
     }}
     .site-header {{
-        padding-bottom: 4rem;
+        padding: 2rem 1rem 2.25rem;
         clip-path: none;
     }}
     .sidebar {{
         position: sticky;
-        top: 0;
+        top: env(safe-area-inset-top, 0);
         z-index: 100;
         border-radius: 0;
         border: none;
