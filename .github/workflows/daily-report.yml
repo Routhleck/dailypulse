@@ -39,12 +39,6 @@ jobs:
           LLM_TRANSLATE_MODEL: ${{ vars.LLM_TRANSLATE_MODEL }}
         run: python run_mission.py
 
-      - name: Debug Report
-        run: |
-          DATE=$(date -u +%Y-%m-%d)
-          echo "=== REPORT HEAD ==="
-          head -80 reports/daily_briefings/Morning_Report_${DATE}.md
-
       - name: Build Pages
         run: |
           DATE=$(date -u +%Y-%m-%d)
