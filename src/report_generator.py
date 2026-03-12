@@ -4,66 +4,100 @@
 Report Generator - 国际时事日报报告生成模块
 """
 
-import logging
 import concurrent.futures
+import logging
 from datetime import datetime
+from typing import Dict, List, Tuple
 
 logger = logging.getLogger(__name__)
 
 try:
-    from utils.gemini_translator import translate_to_chinese, summarize_section
+    from utils.gemini_translator import (
+        TRANSLATION_MAX_WORKERS,
+        summarize_section,
+        translate_to_chinese,
+    )
+    from config import LLM_TRANSLATE
     GEMINI_AVAILABLE = True
 except ImportError:
-    GEMINI_AVAILABLE = False
+    try:
+        from src.utils.gemini_translator import (
+            TRANSLATION_MAX_WORKERS,
+            summarize_section,
+            translate_to_chinese,
+        )
+        from src.config import LLM_TRANSLATE
+        GEMINI_AVAILABLE = True
+    except ImportError:
+        GEMINI_AVAILABLE = False
+        LLM_TRANSLATE = False
+        TRANSLATION_MAX_WORKERS = 4
 
 if not GEMINI_AVAILABLE:
     logger.info("Gemini translator not available, using original text.")
+
     def translate_to_chinese(text, max_chars=100):
         return text[:max_chars] + "..." if len(text) > max_chars else text
+
     def summarize_section(titles_and_summaries, section_name):
         return ""
 
 
-def _translate_all(items_by_section: dict) -> dict:
-    """并行翻译所有英文条目的标题和摘要，返回 {(section, idx): (title_cn, summary_cn)}"""
+TRANSLATION_ENABLED = bool(GEMINI_AVAILABLE and LLM_TRANSLATE)
+
+
+def _translate_all(items_by_section: dict) -> Tuple[Dict, Dict[str, int]]:
+    """并行翻译所有英文条目的标题和摘要，返回翻译结果和统计信息。"""
+    if not TRANSLATION_ENABLED:
+        return {}, {"total": 0, "success": 0}
+
     tasks = {}  # key -> (text, max_chars)
     for section, items in items_by_section.items():
         for i, item in enumerate(items):
-            if item.get("lang") == "zh" or not GEMINI_AVAILABLE:
+            if item.get("lang") == "zh":
                 continue
-            tasks[(section, i, "title")]   = (item.get("title", ""),   100)
+            tasks[(section, i, "title")] = (item.get("title", ""), 100)
             tasks[(section, i, "summary")] = (item.get("summary", ""), 500)
 
     if not tasks:
-        return {}
+        return {}, {"total": 0, "success": 0}
 
     results = {}
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+    success = 0
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=TRANSLATION_MAX_WORKERS) as executor:
         futures = {
-            executor.submit(translate_to_chinese, text, max_chars): key
+            executor.submit(translate_to_chinese, text, max_chars): (key, text)
             for key, (text, max_chars) in tasks.items()
             if text
         }
         for future in concurrent.futures.as_completed(futures):
-            key = futures[future]
+            key, original = futures[future]
             try:
-                results[key] = future.result()
+                translated = future.result() or ""
+                results[key] = translated if translated else original
+                if translated and translated.strip() and translated.strip() != original.strip():
+                    success += 1
             except Exception as e:
                 logger.warning(f"Translation failed for {key}: {e}")
-                results[key] = tasks[key][0]  # fallback to original
+                results[key] = original
 
-    return results
+    return results, {"total": len(futures), "success": success}
 
 
 _SECTION_NAMES = {
-    "politics": "国际政治与外交", "economics": "经济与金融",
-    "military": "军事与安全", "society": "社会与人文",
-    "asia": "亚洲焦点", "analysis": "深度分析",
+    "politics": "国际政治与外交",
+    "economics": "经济与金融",
+    "military": "军事与安全",
+    "society": "社会与人文",
+    "asia": "亚洲焦点",
+    "analysis": "深度分析",
 }
 
 
 def _summarize_sections(section_meta: list) -> dict:
     """并行生成各板块总结，返回 {section_key: summary_str}"""
+
     def _build_input(items):
         texts = []
         for item in items:
@@ -78,7 +112,7 @@ def _summarize_sections(section_meta: list) -> dict:
             executor.submit(
                 summarize_section,
                 _build_input(items),
-                _SECTION_NAMES.get(key, key)
+                _SECTION_NAMES.get(key, key),
             ): key
             for key, items, _ in section_meta
             if items
@@ -92,7 +126,40 @@ def _summarize_sections(section_meta: list) -> dict:
     return results
 
 
-def _render_section(items, limit, translations, section_key, section_summary=""):
+def _render_metrics(metrics: dict) -> List[str]:
+    lines: List[str] = ["## 🧪 质量指标 (Quality Metrics)", ""]
+
+    section_counts = metrics.get("section_counts", {})
+    lines.append(
+        "> 📈 采集总数: {raw} | 去重后条目: {dedup} | 事件数: {events} | 去重率: {rate}%".format(
+            raw=metrics.get("total_raw", 0),
+            dedup=metrics.get("total_dedup", 0),
+            events=metrics.get("total_events", 0),
+            rate=metrics.get("dedup_rate", 0),
+        )
+    )
+    lines.append(
+        "> 🌐 翻译任务: {total} | 翻译成功: {ok} | 翻译成功率: {rate}%".format(
+            total=metrics.get("translation_total", 0),
+            ok=metrics.get("translation_success", 0),
+            rate=metrics.get("translation_rate", 0),
+        )
+    )
+    lines.append(
+        "> 📚 板块产出: 政治 {politics} · 经济 {economics} · 军事 {military} · 社会 {society} · 亚洲 {asia} · 分析 {analysis}".format(
+            politics=section_counts.get("politics", 0),
+            economics=section_counts.get("economics", 0),
+            military=section_counts.get("military", 0),
+            society=section_counts.get("society", 0),
+            asia=section_counts.get("asia", 0),
+            analysis=section_counts.get("analysis", 0),
+        )
+    )
+    lines.append("")
+    return lines
+
+
+def _render_section(items, limit, translations, section_key, section_summary="", event_mode=False):
     lines = []
     if not items:
         lines.append("*暂无数据*\n")
@@ -121,10 +188,26 @@ def _render_section(items, limit, translations, section_key, section_summary="")
         lines.append(f"### {i}. [{display_title}]({url})")
         if lang == "en" and display_title != title:
             lines.append(f"*{title}*")
-        meta = f"📰 {source}"
+
+        meta = f"📰 {source}" if source else "📰 未知来源"
         if pub_date:
             meta += f" | 📅 {pub_date}"
+
+        if event_mode:
+            source_count = item.get("source_count", 1)
+            mention_count = item.get("mention_count", 1)
+            trend = item.get("trend", "")
+            meta += f" | 🔁 {source_count}源/{mention_count}条"
+            if trend:
+                meta += f" | {trend}"
+
         lines.append(meta)
+
+        if event_mode:
+            sources = item.get("sources", [])
+            if sources:
+                lines.append(f"> 来源覆盖: {', '.join(sources[:6])}")
+
         if display_summary:
             lines.append(f"> {' '.join(display_summary.split())}")
         lines.append("")
@@ -132,27 +215,37 @@ def _render_section(items, limit, translations, section_key, section_summary="")
     return lines
 
 
-def generate_report(intel: dict, date_str: str) -> str:
-    """Generate international news daily briefing in Markdown."""
+def generate_report(
+    intel: dict,
+    date_str: str,
+    event_mode: bool = False,
+    metrics: dict | None = None,
+) -> str:
+    """Generate international news briefing in Markdown."""
     sections = [
-        ("politics",  "🏛️ 国际政治与外交 (International Politics & Diplomacy)", 10),
-        ("economics", "💹 经济与金融 (Economics & Markets)",                     8),
-        ("military",  "⚔️ 军事与安全 (Military & Security)",                    8),
-        ("society",   "🌱 社会与人文 (Society & Humanitarian)",                  8),
-        ("asia",      "🌏 亚洲焦点 (Asia Focus)",                               10),
-        ("analysis",  "📖 深度分析 (Analysis & Opinion)",                        5),
+        ("politics", "🏛️ 国际政治与外交 (International Politics & Diplomacy)", 10),
+        ("economics", "💹 经济与金融 (Economics & Markets)", 8),
+        ("military", "⚔️ 军事与安全 (Military & Security)", 8),
+        ("society", "🌱 社会与人文 (Society & Humanitarian)", 8),
+        ("asia", "🌏 亚洲焦点 (Asia Focus)", 10),
+        ("analysis", "📖 深度分析 (Analysis & Opinion)", 5),
     ]
 
-    # 收集每个 section 实际要渲染的条目
-    items_by_section = {
-        key: intel.get(key, [])[:limit]
-        for key, _, limit in sections
-    }
+    items_by_section = {key: intel.get(key, [])[:limit] for key, _, limit in sections}
 
-    # 并行翻译
-    translations = _translate_all(items_by_section)
+    translations, translation_stats = _translate_all(items_by_section)
 
-    # 并行生成板块总结
+    if metrics is not None:
+        metrics["translation_total"] = int(translation_stats["total"])
+        metrics["translation_success"] = int(translation_stats["success"])
+        if translation_stats["total"] > 0:
+            metrics["translation_rate"] = round(
+                translation_stats["success"] / translation_stats["total"] * 100,
+                2,
+            )
+        else:
+            metrics["translation_rate"] = 0.0
+
     section_summaries = _summarize_sections(
         [(key, items_by_section[key], limit) for key, _, limit in sections]
     )
@@ -167,15 +260,24 @@ def generate_report(intel: dict, date_str: str) -> str:
         "",
     ]
 
+    if metrics:
+        lines.extend(_render_metrics(metrics))
+
     for key, heading, limit in sections:
         lines.append(f"## {heading}")
         lines.append("")
-        lines.extend(_render_section(items_by_section[key], limit, translations, key, section_summaries.get(key, "")))
-
-    # lines.append("---")
-    # lines.append("*报告由 DailyPulse 自动生成*")
+        lines.extend(
+            _render_section(
+                items_by_section[key],
+                limit,
+                translations,
+                key,
+                section_summaries.get(key, ""),
+                event_mode=event_mode,
+            )
+        )
 
     return "\n".join(lines)
 
 
-__all__ = ['generate_report']
+__all__ = ["generate_report"]

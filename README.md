@@ -96,6 +96,10 @@ export HTTPS_PROXY=http://127.0.0.1:7890
 | `LLM_MODEL` | 使用的模型名称 | 可选，默认 `gemini-2.5-flash-lite` |
 | `LLM_TRANSLATE` | 是否开启中文翻译，`true` / `false` | 可选，默认 `false`（展示英文原文） |
 | `LLM_TRANSLATE_MODEL` | 翻译专用轻量模型，建议用便宜的 lite 模型 | 可选，不填则使用 `LLM_MODEL` |
+| `TRANSLATION_MAX_WORKERS` | 翻译并发数，超时多时建议调低（3~6） | 可选，默认 `6` |
+| `OPENAI_API_KEY` / `OPENAI_FALLBACK_MODEL` | OpenAI fallback（主提供商超时时自动切换） | 可选 |
+| `NVIDIA_API_KEY` / `NVIDIA_MODEL` | NVIDIA fallback（默认模型 `z-ai/glm5`） | 可选 |
+| `LLM_FALLBACK_BASE_URL` / `LLM_FALLBACK_MODEL` | 自定义 fallback provider | 可选 |
 
 支持的提供商示例：
 
@@ -108,6 +112,15 @@ LLM_API_KEY=your_gemini_key
 LLM_API_KEY=sk-...
 LLM_BASE_URL=https://api.openai.com/v1
 LLM_MODEL=gpt-4o-mini
+
+# OpenAI fallback（例如 gpt-5.4）
+OPENAI_API_KEY=sk-...
+OPENAI_FALLBACK_MODEL=gpt-5.4
+
+# NVIDIA fallback（示例：z-ai/glm5）
+NVIDIA_API_KEY=nvapi-...
+NVIDIA_BASE_URL=https://integrate.api.nvidia.com/v1
+NVIDIA_MODEL=z-ai/glm5
 
 # DeepSeek
 LLM_API_KEY=sk-...

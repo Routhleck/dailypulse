@@ -1,62 +1,180 @@
 """
 LLM Translator - 使用 OpenAI-compatible API 翻译文本为中文
-支持 Gemini、OpenAI、DeepSeek、Qwen 等任意兼容提供商
+支持主模型 + 多 provider fallback（OpenAI/NVIDIA/自定义）
 """
+
+from __future__ import annotations
+
+import logging
 import sys
 import time
-import logging
+from dataclasses import dataclass
+from typing import List, Optional
+
 import httpx
 
 logger = logging.getLogger(__name__)
 
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 try:
-    from config import LLM_API_KEY, LLM_BASE_URL, LLM_TRANSLATE, LLM_TRANSLATE_MODEL, LLM_SUMMARY_MODEL, GEMINI_TIMEOUT, GEMINI_MAX_RETRIES
+    from config import (
+        GEMINI_MAX_RETRIES,
+        GEMINI_TIMEOUT,
+        LLM_API_KEY,
+        LLM_BASE_URL,
+        LLM_FALLBACK_API_KEY,
+        LLM_FALLBACK_BASE_URL,
+        LLM_FALLBACK_MODEL,
+        LLM_SUMMARY_MODEL,
+        LLM_TRANSLATE,
+        LLM_TRANSLATE_MODEL,
+        NVIDIA_API_KEY,
+        NVIDIA_BASE_URL,
+        NVIDIA_FALLBACK_ENABLED,
+        NVIDIA_MODEL,
+        OPENAI_API_KEY,
+        OPENAI_BASE_URL,
+        OPENAI_FALLBACK_ENABLED,
+        OPENAI_FALLBACK_MODEL,
+        TRANSLATION_MAX_WORKERS,
+    )
 except ImportError:
-    from src.config import LLM_API_KEY, LLM_BASE_URL, LLM_TRANSLATE, LLM_TRANSLATE_MODEL, LLM_SUMMARY_MODEL, GEMINI_TIMEOUT, GEMINI_MAX_RETRIES
+    from src.config import (
+        GEMINI_MAX_RETRIES,
+        GEMINI_TIMEOUT,
+        LLM_API_KEY,
+        LLM_BASE_URL,
+        LLM_FALLBACK_API_KEY,
+        LLM_FALLBACK_BASE_URL,
+        LLM_FALLBACK_MODEL,
+        LLM_SUMMARY_MODEL,
+        LLM_TRANSLATE,
+        LLM_TRANSLATE_MODEL,
+        NVIDIA_API_KEY,
+        NVIDIA_BASE_URL,
+        NVIDIA_FALLBACK_ENABLED,
+        NVIDIA_MODEL,
+        OPENAI_API_KEY,
+        OPENAI_BASE_URL,
+        OPENAI_FALLBACK_ENABLED,
+        OPENAI_FALLBACK_MODEL,
+        TRANSLATION_MAX_WORKERS,
+    )
 
-# Backwards-compat: keep GEMINI_API_KEY alias for any external callers
+# Backwards-compat alias for any external callers
 GEMINI_API_KEY = LLM_API_KEY
 
 
-def _chat(prompt: str, max_tokens: int = 1024, model: str = None) -> str:
-    """Call OpenAI-compatible /v1/chat/completions endpoint."""
-    if not LLM_API_KEY:
-        return ""
+@dataclass(frozen=True)
+class Provider:
+    name: str
+    base_url: str
+    api_key: str
+    model: str
 
-    url = f"{LLM_BASE_URL.rstrip('/')}/v1/chat/completions"
-    headers = {"Authorization": f"Bearer {LLM_API_KEY}", "Content-Type": "application/json"}
+
+def _build_chat_url(base_url: str) -> str:
+    base = (base_url or "").rstrip("/")
+    if not base:
+        return ""
+    if base.endswith("/chat/completions"):
+        return base
+    if base.endswith("/v1") or base.endswith("/openai") or base.endswith("/openai/v1"):
+        return f"{base}/chat/completions"
+    return f"{base}/v1/chat/completions"
+
+
+def _provider_chain(primary_model: Optional[str]) -> List[Provider]:
+    providers: List[Provider] = []
+    seen = set()
+
+    def _push(name: str, base_url: str, api_key: str, model_name: str) -> None:
+        chat_url = _build_chat_url(base_url)
+        if not chat_url or not api_key or not model_name:
+            return
+        dedup_key = (chat_url, model_name, api_key)
+        if dedup_key in seen:
+            return
+        seen.add(dedup_key)
+        providers.append(Provider(name=name, base_url=chat_url, api_key=api_key, model=model_name))
+
+    _push("primary", LLM_BASE_URL, LLM_API_KEY, primary_model or LLM_TRANSLATE_MODEL)
+
+    if OPENAI_FALLBACK_ENABLED:
+        _push("openai-fallback", OPENAI_BASE_URL, OPENAI_API_KEY, OPENAI_FALLBACK_MODEL)
+
+    if NVIDIA_FALLBACK_ENABLED:
+        _push("nvidia-fallback", NVIDIA_BASE_URL, NVIDIA_API_KEY, NVIDIA_MODEL)
+
+    _push("custom-fallback", LLM_FALLBACK_BASE_URL, LLM_FALLBACK_API_KEY, LLM_FALLBACK_MODEL)
+
+    return providers
+
+
+def _call_provider(provider: Provider, prompt: str, max_tokens: int) -> str:
+    headers = {
+        "Authorization": f"Bearer {provider.api_key}",
+        "Content-Type": "application/json",
+    }
     payload = {
-        "model": model or LLM_TRANSLATE_MODEL,
+        "model": provider.model,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.3,
         "max_tokens": max_tokens,
     }
 
-    for attempt in range(GEMINI_MAX_RETRIES):
-        try:
-            response = httpx.post(url, json=payload, headers=headers, timeout=GEMINI_TIMEOUT)
-            response.raise_for_status()
-            data = response.json()
-            result = data["choices"][0]["message"]["content"]
-            if result:
-                return result.strip()
-            logger.warning(f"LLM returned empty content (attempt {attempt + 1}/{GEMINI_MAX_RETRIES}), finish_reason={data['choices'][0].get('finish_reason')}")
-            if attempt < GEMINI_MAX_RETRIES - 1:
-                time.sleep(2 ** attempt)
-        except (httpx.HTTPError, httpx.TimeoutException, KeyError, IndexError) as e:
-            if attempt < GEMINI_MAX_RETRIES - 1:
-                logger.warning(f"LLM call failed ({attempt + 1}/{GEMINI_MAX_RETRIES}): {e}")
-                time.sleep(3)
-            else:
-                logger.error(f"LLM call ultimately failed: {e}")
+    response = httpx.post(
+        provider.base_url,
+        json=payload,
+        headers=headers,
+        timeout=GEMINI_TIMEOUT,
+    )
+    response.raise_for_status()
+    data = response.json()
+    return (data.get("choices", [{}])[0].get("message", {}).get("content") or "").strip()
+
+
+def _chat(prompt: str, max_tokens: int = 1024, model: str = None) -> str:
+    """Call OpenAI-compatible chat endpoint with provider fallback chain."""
+    providers = _provider_chain(primary_model=model)
+    if not providers:
+        return ""
+
+    retries = max(1, int(GEMINI_MAX_RETRIES))
+    for idx, provider in enumerate(providers):
+        for attempt in range(retries):
+            try:
+                result = _call_provider(provider, prompt, max_tokens=max_tokens)
+                if result:
+                    return result
+                logger.warning(
+                    "LLM returned empty content provider=%s attempt=%s/%s",
+                    provider.name,
+                    attempt + 1,
+                    retries,
+                )
+            except (httpx.HTTPError, httpx.TimeoutException, KeyError, IndexError) as e:
+                logger.warning(
+                    "LLM call failed provider=%s attempt=%s/%s error=%s",
+                    provider.name,
+                    attempt + 1,
+                    retries,
+                    e,
+                )
+
+            if attempt < retries - 1:
+                time.sleep(min(2 ** attempt, 6))
+
+        if idx < len(providers) - 1:
+            logger.warning("Switching LLM fallback: %s -> %s", provider.name, providers[idx + 1].name)
+
     return ""
 
 
 def translate_to_chinese(text: str, max_chars: int = 100) -> str:
-    if not LLM_TRANSLATE or not LLM_API_KEY:
+    if not LLM_TRANSLATE:
         return text[:max_chars] + "..." if len(text) > max_chars else text
 
     if not text or len(text) < 10:
@@ -84,7 +202,7 @@ def translate_summary_pair(summary: str) -> tuple[str, str]:
 
 
 def summarize_blog_article(content: str, mode: str = "brief") -> str:
-    if not LLM_API_KEY or not content or len(content) < 50:
+    if not content or len(content) < 50:
         return ""
 
     if mode == "brief":
@@ -111,7 +229,7 @@ def summarize_blog_article(content: str, mode: str = "brief") -> str:
 
 def summarize_section(titles_and_summaries: list[str], section_name: str) -> str:
     """用主模型生成板块总结，输入为该板块所有文章的标题+摘要列表。"""
-    if not LLM_API_KEY or not titles_and_summaries:
+    if not titles_and_summaries:
         return ""
     content = "\n".join(f"- {t}" for t in titles_and_summaries)
     prompt = f"""以下是今日{section_name}板块的新闻标题与摘要：
@@ -120,3 +238,12 @@ def summarize_section(titles_and_summaries: list[str], section_name: str) -> str
 
 请作为新闻编辑，用2-3句话客观概括今日该板块的整体动态与主要议题，语言简洁中立，直接输出内容，不要加标题或前缀。"""
     return _chat(prompt, max_tokens=512, model=LLM_SUMMARY_MODEL)
+
+
+__all__ = [
+    "translate_to_chinese",
+    "translate_summary_pair",
+    "summarize_blog_article",
+    "summarize_section",
+    "TRANSLATION_MAX_WORKERS",
+]

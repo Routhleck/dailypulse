@@ -150,7 +150,7 @@ def _dedup_items(items: List[Dict], key: str = "title") -> List[Dict]:
     return unique
 
 
-def fetch_all_sources(limit_per_source: int = 10) -> dict:
+def fetch_all_sources(limit_per_source: int = 10, include_meta: bool = False) -> dict:
     """从所有 RSS 传感器并行抓取国际新闻。"""
     logger.info(f"Starting fetch from all RSS sources (limit={limit_per_source})...")
 
@@ -176,17 +176,30 @@ def fetch_all_sources(limit_per_source: int = 10) -> dict:
         asia      = _safe_result(f_asia,      "Asia")
         analysis  = _safe_result(f_analysis,  "Analysis")
 
-    intel = {
-        "politics":  _dedup_items(politics),
-        "economics": _dedup_items(economics),
-        "military":  _dedup_items(military),
-        "society":   _dedup_items(society),
-        "asia":      _dedup_items(asia),
-        "analysis":  _dedup_items(analysis),
+    raw = {
+        "politics": politics,
+        "economics": economics,
+        "military": military,
+        "society": society,
+        "asia": asia,
+        "analysis": analysis,
     }
+    deduped = {key: _dedup_items(items) for key, items in raw.items()}
+    intel = dict(deduped)
 
-    total = sum(len(v) for v in intel.values())
+    total = sum(len(v) for v in deduped.values())
     logger.info(f"Fetch complete: {total} total items collected")
+
+    if include_meta:
+        raw_counts = {key: len(items) for key, items in raw.items()}
+        dedup_counts = {key: len(items) for key, items in deduped.items()}
+        intel["__meta__"] = {
+            "section_raw_counts": raw_counts,
+            "section_dedup_counts": dedup_counts,
+            "total_raw": sum(raw_counts.values()),
+            "total_dedup": sum(dedup_counts.values()),
+        }
+
     return intel
 
 

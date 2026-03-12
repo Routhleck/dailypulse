@@ -30,6 +30,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Restore history DB from gh-pages
+        run: |
+          mkdir -p .state
+          git fetch origin gh-pages 2>/dev/null || true
+          git show origin/gh-pages:data/dailypulse.db > .state/dailypulse.db 2>/dev/null || true
+
       - name: Generate Morning Report
         env:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
@@ -38,7 +44,19 @@ jobs:
           LLM_TRANSLATE: ${{ vars.LLM_TRANSLATE }}
           LLM_TRANSLATE_MODEL: ${{ vars.LLM_TRANSLATE_MODEL }}
           LLM_SUMMARY_MODEL: ${{ vars.LLM_SUMMARY_MODEL }}
-        run: python run_mission.py
+          TRANSLATION_MAX_WORKERS: ${{ vars.TRANSLATION_MAX_WORKERS }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_FALLBACK_MODEL: ${{ vars.OPENAI_FALLBACK_MODEL }}
+          OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL }}
+          OPENAI_FALLBACK_ENABLED: ${{ vars.OPENAI_FALLBACK_ENABLED }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_BASE_URL: ${{ vars.NVIDIA_BASE_URL }}
+          NVIDIA_MODEL: ${{ vars.NVIDIA_MODEL }}
+          NVIDIA_FALLBACK_ENABLED: ${{ vars.NVIDIA_FALLBACK_ENABLED }}
+          LLM_FALLBACK_API_KEY: ${{ secrets.LLM_FALLBACK_API_KEY }}
+          LLM_FALLBACK_BASE_URL: ${{ vars.LLM_FALLBACK_BASE_URL }}
+          LLM_FALLBACK_MODEL: ${{ vars.LLM_FALLBACK_MODEL }}
+        run: python run_mission.py --db-path .state/dailypulse.db
 
       - name: Build Pages
         run: |
@@ -47,6 +65,7 @@ jobs:
 
           # Fetch existing archives from gh-pages
           mkdir -p /tmp/pages/archive
+          mkdir -p /tmp/pages/data
           git fetch origin gh-pages 2>/dev/null || true
           git show origin/gh-pages:archive/index.json > /tmp/pages/archive/index.json 2>/dev/null || true
           for f in $(git ls-tree --name-only origin/gh-pages:archive/ 2>/dev/null | grep '\.html$'); do
@@ -56,6 +75,7 @@ jobs:
           # Copy new files
           cp index.html /tmp/pages/index.html
           cp archive/${DATE}.html /tmp/pages/archive/${DATE}.html
+          if [ -f .state/dailypulse.db ]; then cp .state/dailypulse.db /tmp/pages/data/dailypulse.db; fi
 
           # Keep only 14 most recent archives
           ls -t /tmp/pages/archive/*.html 2>/dev/null | tail -n +15 | xargs rm -f 2>/dev/null || true

@@ -543,7 +543,8 @@ page = f"""<!DOCTYPE html>
 
   const labelMap = {{
     '\U0001f3db': '政治外交', '\U0001f4b9': '经济金融', '\u2694': '军事安全',
-    '\U0001f331': '社会人文', '\U0001f30f': '亚洲焦点', '\U0001f4d6': '深度分析'
+    '\U0001f331': '社会人文', '\U0001f30f': '亚洲焦点', '\U0001f4d6': '深度分析',
+    '\U0001f9ea': '质量指标'
   }};
 
   function getShortLabel(text) {{
@@ -560,12 +561,12 @@ page = f"""<!DOCTYPE html>
   nodes.forEach(node => {{
     if (node.nodeType !== 1) return;
     if (node.tagName === 'H2') {{
-      currentSection = {{ title: node.innerHTML, summary: null, articles: [] }};
+      currentSection = {{ title: node.innerHTML, summaryNodes: [], articles: [] }};
       sections.push(currentSection);
     }} else if (node.tagName === 'H3' && currentSection) {{
       currentSection.articles.push({{ title: node, elements: [] }});
     }} else if (currentSection && currentSection.articles.length === 0) {{
-      if (node.tagName === 'BLOCKQUOTE') currentSection.summary = node;
+      if (node.tagName === 'BLOCKQUOTE') currentSection.summaryNodes.push(node);
     }} else if (currentSection && currentSection.articles.length > 0) {{
       currentSection.articles[currentSection.articles.length - 1].elements.push(node);
     }}
@@ -582,10 +583,10 @@ page = f"""<!DOCTYPE html>
     headerEl.innerHTML = `<h2>${{sec.title}}</h2>`;
     sectionEl.appendChild(headerEl);
 
-    if (sec.summary) {{
+    if (sec.summaryNodes && sec.summaryNodes.length > 0) {{
       const summaryEl = document.createElement('div');
       summaryEl.className = 'section-summary';
-      summaryEl.innerHTML = sec.summary.innerHTML;
+      summaryEl.innerHTML = sec.summaryNodes.map(n => n.innerHTML).join('<br/>');
       sectionEl.appendChild(summaryEl);
     }}
 
