@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DailyPulse · 2026年03月13日</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script>const ARCHIVE_BASE = "archive";</script>
+<style>
+  :root {
+    --dp-bg: #eef2f7;
+    --dp-card: #ffffff;
+    --dp-text: #1f2937;
+    --dp-muted: #6b7280;
+    --dp-accent: #2563eb;
+    --dp-border: #e5e7eb;
+    --dp-hero: linear-gradient(135deg, #111827 0%, #1f3b8a 52%, #2563eb 100%);
+    --dp-serif: "Noto Serif SC", serif;
+    --dp-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --dp-bg: #0f172a;
+      --dp-card: #111827;
+      --dp-text: #f3f4f6;
+      --dp-muted: #94a3b8;
+      --dp-accent: #60a5fa;
+      --dp-border: #334155;
+      --dp-hero: linear-gradient(135deg, #020617 0%, #0f172a 48%, #1d4ed8 100%);
+    }
+  }
+
+  body {
+    font-family: var(--dp-sans);
+    background: radial-gradient(circle at top right, rgba(37,99,235,0.08), transparent 40%), var(--dp-bg);
+    color: var(--dp-text);
+    min-height: 100vh;
+  }
+
+  .hero {
+    background: var(--dp-hero);
+    color: #fff;
+    padding: 2.25rem 0 1.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .hero-brand {
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .hero-title {
+    margin-top: 0.5rem;
+    font-family: var(--dp-serif);
+    font-size: clamp(1.75rem, 3.8vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .hero-meta {
+    margin-top: 0.95rem;
+    display: flex;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .hero-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    padding: 0.34rem 0.8rem;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.22);
+    font-size: 0.84rem;
+  }
+
+  .app-wrap {
+    margin-top: 1.1rem;
+    margin-bottom: 2.2rem;
+  }
+
+  .panel {
+    background: var(--dp-card);
+    border: 1px solid var(--dp-border);
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(2, 6, 23, 0.04);
+  }
+
+  .sidebar-panel {
+    position: sticky;
+    top: 1rem;
+  }
+
+  .sidebar-title {
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dp-muted);
+    font-weight: 700;
+  }
+
+  .nav-item-link {
+    border: 0;
+    border-left: 3px solid transparent;
+    border-radius: 0.5rem;
+    color: var(--dp-muted);
+    transition: all .15s ease;
+    font-size: 0.93rem;
+  }
+
+  .nav-item-link:hover {
+    background: color-mix(in srgb, var(--dp-accent) 8%, transparent);
+    color: var(--dp-text);
+  }
+
+  .nav-item-link.active {
+    border-left-color: var(--dp-accent);
+    color: var(--dp-text);
+    background: color-mix(in srgb, var(--dp-accent) 12%, transparent);
+    font-weight: 600;
+  }
+
+  .section {
+    margin-bottom: 2rem;
+    scroll-margin-top: 1rem;
+  }
+
+  .section-head {
+    font-family: var(--dp-serif);
+    font-size: clamp(1.18rem, 2.2vw, 1.58rem);
+    margin-bottom: 1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 2px solid var(--dp-border);
+  }
+
+  .summary-card {
+    border-radius: 12px;
+    border-left: 4px solid var(--dp-accent);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--dp-accent) 10%, transparent), color-mix(in srgb, #22c55e 10%, transparent));
+    color: var(--dp-text);
+  }
+
+  .article-card {
+    border-radius: 12px;
+    border: 1px solid var(--dp-border);
+    background: var(--dp-card);
+    margin-bottom: 1rem;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+
+  .article-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(2, 6, 23, 0.08);
+  }
+
+  .article-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .article-title a:hover {
+    color: var(--dp-accent);
+  }
+
+  .meta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-bottom: 0.15rem; }
+  .meta-source { font-size: 0.82rem; font-weight: 600; color: var(--dp-text); }
+  .meta-badge {
+    display: inline-flex; align-items: center;
+    border-radius: 999px; padding: 0.1rem 0.5rem;
+    font-size: 0.72rem; font-weight: 600;
+    background: color-mix(in srgb, var(--dp-accent) 15%, transparent);
+    color: var(--dp-accent); border: 1px solid color-mix(in srgb, var(--dp-accent) 30%, transparent);
+  }
+  .meta-secondary { font-size: 0.76rem; color: var(--dp-muted); }
+
+  .article-quote {
+    border-left: 3px solid var(--dp-accent);
+    padding-left: 0.8rem;
+    color: var(--dp-text);
+    margin-top: 0.5rem;
+  }
+
+  .article-summary {
+    color: var(--dp-muted);
+  }
+
+  .mobile-nav-btn {
+    border-color: rgba(255,255,255,0.28);
+    color: #fff;
+  }
+
+  .mobile-nav-btn:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+
+  .quick-nav-fab {
+    position: fixed;
+    right: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    z-index: 1085;
+    border-radius: 999px;
+    box-shadow: 0 12px 24px rgba(2, 6, 23, 0.28);
+    border: 1px solid rgba(255,255,255,0.2);
+    background: color-mix(in srgb, var(--dp-accent) 88%, #111827 12%);
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: 0.5rem 0.85rem;
+  }
+
+  .quick-nav-fab:hover {
+    color: #fff;
+    background: color-mix(in srgb, var(--dp-accent) 78%, #111827 22%);
+  }
+
+  .history-menu-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  @media (max-width: 991.98px) {
+    .app-wrap { margin-top: 0.85rem; }
+    .hero { padding: 1.5rem 0 1.1rem; }
+    body { padding-bottom: 4.5rem; }
+    .quick-nav-fab { display: inline-flex; align-items: center; gap: 0.35rem; }
+  }
+
+  @media (min-width: 992px) {
+    .quick-nav-fab { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container-xxl">
+    <div class="hero-brand">DailyPulse</div>
+    <h1 class="hero-title">🌍 国际时事日报</h1>
+    <div class="hero-meta">
+      <span class="hero-chip">📅 2026年03月13日</span>
+      
+      <div class="dropdown">
+        <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" id="history-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">📂 历史</button>
+        <ul class="dropdown-menu history-menu-scroll" id="history-menu" aria-labelledby="history-btn">
+          <li><span class="dropdown-item-text text-muted">加载中...</span></li>
+        </ul>
+      </div>
+      <button class="btn btn-sm mobile-nav-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sectionNavCanvas" aria-controls="sectionNavCanvas">☰ 板块导航</button>
+    </div>
+  </div>
+</header>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sectionNavCanvas" aria-labelledby="sectionNavCanvasLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="sectionNavCanvasLabel">板块导航</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="list-group list-group-flush" id="mobile-nav"></div>
+  </div>
+</div>
+
+<div class="container-xxl app-wrap">
+  <div class="row g-3 g-lg-4">
+    <aside class="col-lg-3 d-none d-lg-block">
+      <div class="panel sidebar-panel p-3" id="desktop-sidebar">
+        <div class="sidebar-title px-2 pb-2">Sections</div>
+        <div class="list-group list-group-flush" id="desktop-nav"></div>
+      </div>
+    </aside>
+    <main class="col-12 col-lg-9">
+      <div id="main-content"></div>
+    </main>
+  </div>
+</div>
+
+<footer class="container-xxl pb-4 text-center text-secondary small">
+  Generated by DailyPulse AI · 2026-03-13
+</footer>
+
+<button class="btn quick-nav-fab d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sectionNavCanvas" aria-controls="sectionNavCanvas" aria-label="打开板块导航">
+  ☰ 目录
+</button>
+
+<div id="raw-content" style="display:none"><h1>国际时事日报: 2026-03-13</h1>
+<p><strong>日期:</strong> 2026-03-13
+<strong>生成时间:</strong> 12:42
+<strong>数据源:</strong> BBC · Reuters · AP · SCMP · Guardian · FT · NHK · Yonhap · Al Jazeera · VOA中文 · RFI中文 · BBC中文</p>
+<hr />
+<h2>🧪 质量指标 (Quality Metrics)</h2>
+<blockquote>
+<p>📈 采集总数: 81 | 去重后条目: 81 | 事件数: 81 | 去重率: 0.0%
+🌐 翻译任务: 98 | 翻译成功: 98 | 翻译成功率: 100.0%
+📚 板块产出: 政治 15 · 经济 15 · 军事 15 · 社会 15 · 亚洲 15 · 分析 6</p>
+</blockquote>
+<h2>🏛️ 国际政治与外交 (International Politics &amp; Diplomacy)</h2>
+<blockquote>
+<p>📊 <strong>板块速览：</strong> 今日国际政治与外交板块聚焦中东局势升温，美军一架加油机在伊拉克坠毁造成人员伤亡，同时美国潜艇击沉伊朗军舰事件持续发酵，84名伊朗水兵遗体将被遣返，海湾地区紧张态势引发广泛关注。香港本地议题亦占据重要版面，涵盖国家安全法庭裁决、公共交通劳资纠纷及城市发展动态等多个层面。此外，法国地方选举、非法燃油问题及文化娱乐资讯等议题共同构成当日报道的多元面貌。</p>
+</blockquote>
+<h3>1. <a href="https://www.bbc.com/news/articles/cy0dz5ql17vo?at_medium=RSS&amp;at_campaign=rss">美军一架加油机在伊拉克坠毁，四名机组人员遇难。</a></h3>
+<p><em>Four crew members killed after US refuelling plane crashes in Iraq</em>
+📰 BBC World News | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: BBC World News
+美国中央司令部表示，一架加油机在伊拉克西部坠毁，目前救援工作仍在进行中。</p>
+</blockquote>
+<h3>2. <a href="https://www.bbc.com/news/articles/ce3g0vz223no?at_medium=RSS&amp;at_campaign=rss">“船上无处藏身”：滞留在海湾的海员</a></h3>
+<p><em>'There's no hiding place on a ship': The sailors stranded in the Gulf</em>
+📰 BBC World News | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: BBC World News
+对于许多滞留在海湾地区船只上的海员来说，无人机、巡航导弹和战斗机已成为司空见惯的景象。</p>
+</blockquote>
+<h3>3. <a href="https://www.bbc.com/news/articles/c363lk4xk07o?at_medium=RSS&amp;at_campaign=rss">84名在美军鱼雷袭击中丧生的伊朗水兵遗体将被遣返回国。</a></h3>
+<p><em>Bodies of 84 Iranian sailors killed in US torpedo strike to be repatriated</em>
+📰 BBC World News | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: BBC World News
+3月4日，伊朗军舰“德纳”号在斯里兰卡附近海域被一艘美国潜艇击沉，造成船上水兵遇难。</p>
+</blockquote>
+<h3>4. <a href="https://www.bbc.com/news/articles/cdxzzqye9w0o?at_medium=RSS&amp;at_campaign=rss">法国大选考验极化选民，右翼冀望夺取巴黎控制权。</a></h3>
+<p><em>French vote tests polarised electorate with right hoping to win control of Paris</em>
+📰 BBC World News | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: BBC World News
+最受瞩目的角逐是巴黎市长之争，该市已由左翼掌权25年。</p>
+</blockquote>
+<h3>5. <a href="https://www.bbc.com/news/articles/c2k8wvzgqk7o?at_medium=RSS&amp;at_campaign=rss">Netflix 宣布拍摄续集，《K-Pop 驱魔人》将回归。</a></h3>
+<p><em>KPop Demon Hunters to return as Netflix announces sequel</em>
+📰 BBC World News | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: BBC World News
+续集请回了首部电影的联合导演，该片曾是该流媒体平台的大热之作。</p>
+</blockquote>
+<h3>6. <a href="https://www.scmp.com/business/article/3346491/jpmorgan-signs-anchor-tenant-shkps-west-kowloon-office-development?utm_source=rss_feed">摩根大通签约成为新鸿基地产西九龙办公楼项目的主要租户。</a></h3>
+<p><em>JPMorgan signs up as anchor tenant for SHKP’s West Kowloon office development</em>
+📰 SCMP World | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: SCMP World
+摩根大通已承诺承租新鸿基地产位于香港西九龙区新办公大楼约25万平方英尺的空间，租期为10年。据这家在港上市的开发商表示，这使得该美资投行成为这一建筑面积达70万平方英尺的综合用途项目的主要租户。</p>
+</blockquote>
+<h3>7. <a href="https://www.scmp.com/news/hong-kong/article/3346512/hong-kong-mtr-corp-pay-rise-below-expectations-union?utm_source=rss_feed">工会：港铁加薪幅度低于预期</a></h3>
+<p><em>Hong Kong MTR Corp pay rise below expectations: union</em>
+📰 SCMP World | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: SCMP World
+代表香港铁路有限公司（港铁）员工的一个工会对该公司拒绝考虑改善福利的诉求表示失望，称大多数员工最高3.84%的加薪幅度“略低于诉求”。港铁公司宣布加薪...</p>
+</blockquote>
+<h3>8. <a href="https://www.scmp.com/news/hong-kong/law-and-crime/article/3346478/2-tiananmen-vigil-activists-have-case-answer-subversion-trial-court-rules?utm_source=rss_feed">法院裁定，两名反华活动人士在颠覆政权案审判中表证成立。</a></h3>
+<p><em>2 anti-China activists have case to answer in subversion trial, court rules</em>
+📰 SCMP World | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: SCMP World
+香港已解散的、曾负责举办年度六四烛光晚会的组织的两名前领导人，在一场备受瞩目的审判中被裁定表面证供成立。法官裁定，证据支持控方关于这些活动人士煽动他人推翻中国共产党领导的指控。</p>
+</blockquote>
+<h3>9. <a href="https://www.scmp.com/news/hong-kong/society/article/3346464/donald-liao-architect-who-shaped-hong-kongs-housing-landscape-dies-96?utm_source=rss_feed">塑造了香港房屋面貌的建筑师廖本怀逝世，享年96岁。</a></h3>
+<p><em>Donald Liao, architect who shaped Hong Kong’s housing landscape, dies at 96</em>
+📰 SCMP World | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: SCMP World
+香港最具影响力的政府建筑师及公共房屋先驱之一廖本怀逝世，享年96岁。他是英治时期首位出任政务司的华人官员。其家属向《南华早报》证实了其死讯。</p>
+</blockquote>
+<h3>10. <a href="https://www.scmp.com/news/hong-kong/law-and-crime/article/3346460/jump-illegal-refuelling-complaints-hong-kong-grapples-rising-oil-prices?utm_source=rss_feed">香港应对油价上涨之际，非法加油投诉量激增。</a></h3>
+<p><em>Jump in illegal refuelling complaints as Hong Kong grapples with rising oil prices</em>
+📰 SCMP World | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: SCMP World
+据当局表示，香港非法经营者一直将车辆改装为流动加油站，对公众安全构成风险。据报告，每月非法加油活动的平均投诉量激增了42%。环境及生态局...</p>
+</blockquote>
+<h2>💹 经济与金融 (Economics &amp; Markets)</h2>
+<blockquote>
+<p>📊 <strong>板块速览：</strong> 今日经济与金融板块呈现出地缘政治与市场走势交织的格局：美国通胀数据符合预期，推动股市上涨，但油价下跌，市场整体波动剧烈。与此同时，德国批评美国放宽俄罗斯石油制裁，印度宣布设立620亿美元基金以应对伊朗战争带来的经济冲击，地缘风险持续影响全球经济政策走向。此外，波兰总统否决欧盟国防融资计划，欧洲内部在安全事务上的主权与一体化矛盾再度浮现。</p>
+</blockquote>
+<h3>1. <a href="https://www.ft.com/content/da80dd64-f475-409e-b9ea-1ad979e1a40d">波兰疑欧派总统否决欧盟国防拨款。</a></h3>
+<p><em>Poland’s Eurosceptic president vetoes EU funding for defence</em>
+📰 FT World Economy | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: FT World Economy
+卡罗尔·纳夫罗茨基反对 Safe 贷款，声称这将让布鲁塞尔在国家安全事务中拥有发言权。</p>
+</blockquote>
+<h3>2. <a href="https://www.ft.com/content/150984eb-b67f-4c06-9afe-71fb94100833">一场不明智的银行宣传照拍摄带来的教训</a></h3>
+<p><em>Lessons from an unwise banking photo shoot</em>
+📰 FT World Economy | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: FT World Economy
+对四名身着阿玛尼外套、系着爱马仕领带的金融界年轻男性的采访，揭示了多重矛盾。</p>
+</blockquote>
+<h3>3. <a href="https://www.ft.com/content/27989b65-f349-4499-b19f-242e6268aa52">餐厅火柴盒是2026年最酷的伴手礼。</a></h3>
+<p><em>The restaurant matchbox is 2026’s coolest takeaway</em>
+📰 FT World Economy | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: FT World Economy
+这些微小的设计本身几乎就是艺术品。</p>
+</blockquote>
+<h3>4. <a href="https://www.ft.com/content/d213e507-905e-440b-987e-66bfc1acdffe">德国默茨抨击美国放宽对俄石油制裁的“错误”决定。</a></h3>
+<p><em>Germany’s Merz hits out at ‘wrong’ US decision to ease Russia oil sanctions</em>
+📰 FT World Economy | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: FT World Economy
+在特朗普允许各国购买滞留海上的俄罗斯石油后，总理发表了相关言论。</p>
+</blockquote>
+<h3>5. <a href="https://www.ft.com/content/82ba8f86-d81d-4e09-adb3-1e482927758d">英国将通过削弱野生动物保护来加快核电项目进度。</a></h3>
+<p><em>UK to speed up nuclear power projects by weakening wildlife protection</em>
+📰 FT World Economy | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: FT World Economy
+政府将采纳芬格尔顿审查报告的建议，令生态学家深感沮丧。</p>
+</blockquote>
+<h3>6. <a href="https://www.bloomberg.com/news/articles/2026-03-12/asian-stocks-bonds-to-echo-us-drop-as-crude-rises-markets-wrap">通胀数据符合预期，油价下跌，股市上涨：市场综述</a></h3>
+<p><em>Stocks Rise on In-Line Inflation Data as Oil Falls: Markets Wrap</em>
+📰 Bloomberg Markets | 📅 Thu, 12 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Bloomberg Markets
+通胀数据符合预期促使股市上涨，油价在伊朗战争引发的能源市场剧烈波动周结束之际下跌。</p>
+</blockquote>
+<h3>7. <a href="https://www.bloomberg.com/news/articles/2026-03-13/hegseth-says-khamenei-wounded-likely-disfigured">赫格塞斯称哈梅内伊“受伤”、“可能毁容”</a></h3>
+<p><em>Hegseth Says Khamenei ‘Wounded,’ ‘Likely Disfigured’</em>
+📰 Bloomberg Markets | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Bloomberg Markets
+美国国防部长皮特·海格塞斯表示，伊朗新领导人穆杰塔巴·哈梅内伊在美以针对该国的行动中受伤。</p>
+</blockquote>
+<h3>8. <a href="https://www.bloomberg.com/news/articles/2026-03-13/india-considers-covid-era-relief-for-exporters-hurt-by-iran-war">印度计划在伊朗战争背景下设立62亿美元基金并提供出口救济。</a></h3>
+<p><em>India Plans $6.2 Billion Fund, Export Relief Amid Iran War</em>
+📰 Bloomberg Markets | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Bloomberg Markets
+印度财政部长尼尔马拉·西塔拉曼周五表示，印度正拨出62亿美元以帮助经济抵御全球危机的任何不利影响，同时也在考虑采取措施，在中东战争导致能源价格高企的背景下保护出口商。</p>
+</blockquote>
+<h2>⚔️ 军事与安全 (Military &amp; Security)</h2>
+<blockquote>
+<p>📊 <strong>板块速览：</strong> 今日军事与安全板块的核心焦点集中于以色列与伊朗之间持续升级的冲突：伊朗首都德黑兰在圣城日集会期间遭到空袭，土耳其拦截了来自伊朗的第三枚导弹，内塔尼亚胡公开表示希望借军事打击推动伊朗政权更迭。与此同时，美国本土发生针对犹太教堂和大学的袭击事件，地区安全形势不容乐观。此外，朝鲜半岛方向亦有动态，韩国就日本领土主张发出警告，美韩在投资合作领域则释放出积极信号。</p>
+</blockquote>
+<h3>1. <a href="https://www.aljazeera.com/news/2026/3/13/michigan-synagogue-and-virginia-university-shootings-what-we-know?traffic_source=rss">密歇根州犹太教堂与弗吉尼亚州大学枪击案：我们所了解的情况</a></h3>
+<p><em>Michigan synagogue and Virginia university shootings: What we know</em>
+📰 Al Jazeera | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Al Jazeera
+驾车冲撞底特律以色列神庙犹太教堂的袭击者已被击毙。</p>
+</blockquote>
+<h3>2. <a href="https://www.aljazeera.com/video/newsfeed/2026/3/13/air-attack-strikes-tehran-during-al-quds-day-rally?traffic_source=rss">耶路撒冷日集会期间，德黑兰遭空袭。</a></h3>
+<p><em>Air attack strikes Tehran during al-Quds Day rally</em>
+📰 Al Jazeera | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Al Jazeera
+德黑兰数千名伊朗人纪念“圣城日”之际，附近遭到空袭，据报造成至少一人死亡。</p>
+</blockquote>
+<h3>3. <a href="https://www.aljazeera.com/news/2026/3/13/turkiye-says-nato-defences-intercepted-third-missile-from-iran?traffic_source=rss">土耳其称北约防御系统拦截了第三枚来自伊朗的导弹。</a></h3>
+<p><em>Turkiye says NATO defences intercepted third missile from Iran</em>
+📰 Al Jazeera | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Al Jazeera
+这些导弹正日益对北约成员国土耳其及该联盟构成考验。</p>
+</blockquote>
+<h3>4. <a href="https://www.aljazeera.com/video/newsfeed/2026/3/13/netanyahu-wants-to-create-conditions-for-iran-regime-change?traffic_source=rss">内塔尼亚胡想要为伊朗政权更迭“创造条件”</a></h3>
+<p><em>Netanyahu wants to ‘create conditions’ for Iran regime change</em>
+📰 Al Jazeera | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Al Jazeera
+以色列总理内塔尼亚胡表示，他希望以色列对伊朗的袭击能有助于促成该国的政权更迭。</p>
+</blockquote>
+<h3>5. <a href="https://www.aljazeera.com/sports/2026/3/13/iran-hit-back-at-trump-over-fifa-world-cup-exclusion-threat?traffic_source=rss">伊朗队回击特朗普将其排除出世界杯的威胁。</a></h3>
+<p><em>Iran team hit back at Trump over FIFA World Cup exclusion threat</em>
+📰 Al Jazeera | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Al Jazeera
+伊朗表示，任何人都无法将其排除在2026年国际足联世界杯之外，该届赛事由美国、加拿大和墨西哥联合举办。</p>
+</blockquote>
+<h3>6. <a href="https://en.yna.co.kr/view/AEN20260313010100315">美国官员：美国欢迎韩国通过投资法案，称其为“积极”举措。</a></h3>
+<p><em>U.S. welcomes S. Korea's passage of investment bill as 'positive' step: U.S. official</em>
+📰 Yonhap | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Yonhap
+华盛顿，3月13日（韩联社）—— 美国总统唐纳德·特朗普政府……</p>
+</blockquote>
+<h3>7. <a href="https://en.yna.co.kr/view/AEN20260313010000320">韩国警告将严厉回应日本首相再次主张独岛主权。</a></h3>
+<p><em>S. Korea warns of stern response to Japan PM's renewed Dokdo claim</em>
+📰 Yonhap | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Yonhap
+韩联社首尔3月13日电 韩国外交部周五表示，将……</p>
+</blockquote>
+<h3>8. <a href="https://en.yna.co.kr/view/AEN20260313009800315">李建议推动大田与忠清道更广泛的区域一体化。</a></h3>
+<p><em>Lee suggests wider regional integration for Daejeon, Chungcheong provinces</em>
+📰 Yonhap | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Yonhap
+韩联社首尔3月13日电——李在明总统周五提出了……的想法</p>
+</blockquote>
+<h2>🌱 社会与人文 (Society &amp; Humanitarian)</h2>
+<blockquote>
+<p>📊 <strong>板块速览：</strong> 今日社会与人文板块的新闻以中东局势为核心，涵盖以色列对伊朗的军事打击、德黑兰空袭及土耳其拦截导弹等事件，地区紧张态势持续升级。与此同时，美国国内发生针对犹太教堂和大学的袭击事件，特朗普政府的移民遣返政策及对伊朗世界杯参赛资格的威胁也引发国际关注。非洲方面，英国削减全球卫生援助项目，以及中国人工智能监控技术在非洲大陆的扩张问题同样受到瞩目。</p>
+</blockquote>
+<h3>1. <a href="https://www.aljazeera.com/news/2026/3/13/michigan-synagogue-and-virginia-university-shootings-what-we-know?traffic_source=rss">密歇根州犹太教堂与弗吉尼亚州大学枪击案：目前已知的信息</a></h3>
+<p><em>Michigan synagogue and Virginia university shootings: What we know</em>
+📰 Al Jazeera | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Al Jazeera
+驾车冲撞底特律以色列神庙犹太教堂的袭击者已被击毙。</p>
+</blockquote>
+<h3>2. <a href="https://www.aljazeera.com/video/newsfeed/2026/3/13/air-attack-strikes-tehran-during-al-quds-day-rally?traffic_source=rss">德黑兰在“耶路撒冷日”集会期间遭空袭</a></h3>
+<p><em>Air attack strikes Tehran during al-Quds Day rally</em>
+📰 Al Jazeera | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Al Jazeera
+一场空袭袭击了德黑兰数千名正在纪念“圣城日”的伊朗人附近，据报造成至少一人死亡。</p>
+</blockquote>
+<h3>3. <a href="https://www.aljazeera.com/news/2026/3/13/turkiye-says-nato-defences-intercepted-third-missile-from-iran?traffic_source=rss">土耳其称北约防御系统拦截了来自伊朗的第三枚导弹。</a></h3>
+<p><em>Turkiye says NATO defences intercepted third missile from Iran</em>
+📰 Al Jazeera | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Al Jazeera
+这些导弹正日益对北约成员国土耳其及该联盟构成考验。</p>
+</blockquote>
+<h3>4. <a href="https://www.aljazeera.com/video/newsfeed/2026/3/13/netanyahu-wants-to-create-conditions-for-iran-regime-change?traffic_source=rss">内塔尼亚胡希望为伊朗政权更迭“创造条件”</a></h3>
+<p><em>Netanyahu wants to ‘create conditions’ for Iran regime change</em>
+📰 Al Jazeera | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Al Jazeera
+以色列总理本雅明·内塔尼亚胡表示，他希望以色列对伊朗的打击能有助于推动政权更迭。</p>
+</blockquote>
+<h3>5. <a href="https://www.aljazeera.com/sports/2026/3/13/iran-hit-back-at-trump-over-fifa-world-cup-exclusion-threat?traffic_source=rss">伊朗队回击特朗普关于世界杯禁赛的威胁</a></h3>
+<p><em>Iran team hit back at Trump over FIFA World Cup exclusion threat</em>
+📰 Al Jazeera | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Al Jazeera
+伊朗表示，任何人都无法将其排除在由美国、加拿大和墨西哥联合举办的2026年国际足联世界杯之外。</p>
+</blockquote>
+<h3>6. <a href="https://www.theguardian.com/us-news/2026/mar/12/trump-immigration-deportations-eswatini">斯威士兰称，作为与特朗普政府协议的一部分，该国接收了更多“第三国”被驱逐者。</a></h3>
+<p><em>Eswatini says it received more ‘third country’ deportees as part of deal with Trump administration</em>
+📰 The Guardian World | 📅 Thu, 12 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: The Guardian World
+被遣送到斯威士兰的被遣返者中，两人来自索马里，一人来自苏丹，一人来自坦桑尼亚。斯威士兰政府周四宣布，</p>
+</blockquote>
+<h3>7. <a href="https://www.theguardian.com/global-development/2026/mar/12/uk-government-axes-flagship-global-health-project">英国政府取消旗舰全球卫生项目</a></h3>
+<p><em>UK government axes flagship global health project</em>
+📰 The Guardian World | 📅 Thu, 12 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: The Guardian World
+该项目支持六个非洲国家的方案，此前被誉为英国抵御未来大流行病的重要保护。 一项在非洲开展的旗舰卫生项目正被取消，英国大臣</p>
+</blockquote>
+<h3>8. <a href="https://www.theguardian.com/global-development/2026/mar/12/invasive-ai-led-mass-surveillance-in-africa-violating-freedoms-warn-experts">专家警告：非洲“侵入性”人工智能大规模监控侵犯自由。</a></h3>
+<p><em>‘Invasive’ AI-led mass surveillance in Africa violating freedoms, warn experts</em>
+📰 The Guardian World | 📅 Thu, 12 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: The Guardian World
+新报告发现，非洲大陆各国已耗资超过20亿美元购买并不“必要或符合比例”的中国追踪技术。人工智能驱动的大规模监控系统在非洲的快速扩张正在侵犯公民的隐私权，并产生寒蝉效应。</p>
+</blockquote>
+<h2>🌏 亚洲焦点 (Asia Focus)</h2>
+<blockquote>
+<p>📊 <strong>板块速览：</strong> 今日亚洲焦点板块涵盖政治、安全与科技多个领域。政治层面，日本新年度预算案获众院通过，伊朗新最高领导人发表强硬声明，中美围绕香港、台湾及黎以战事的紧张态势持续升温；能源与安全方面，日本柏崎刈羽核电站出现故障并暂停发电，日本动用战略石油储备亦引发外界对中国影响力的关注。科技领域则出现两则值得关注的进展：中国在氧化镓半导体及脑机接口技术上取得突破，或对美国军事与医疗领域形成竞争压力。</p>
+</blockquote>
+<h3>1. <a href="http://www3.nhk.or.jp/news/html/20260313/k10015075271000.html">新年度预算案在众议院全体会议获通过 自民党及维新党等多数赞成</a></h3>
+<p><em>新年度予算案 衆院本会議で可決 自民・維新両党など賛成多数で</em>
+📰 NHK World | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: NHK World
+一般账户总额创历史新高、达122万亿多日元的新年度预算案，在众议院全体会议上进行表决，凭借自民党、维新会等多数赞成获得通过，并送交参议院。</p>
+</blockquote>
+<h3>2. <a href="http://www3.nhk.or.jp/news/html/20260313/k10015074571000.html">莫吉塔巴摆出彻底抗战姿态 特朗普暗示将进一步攻击</a></h3>
+<p><em>モジタバ師 徹底抗戦の構え トランプ大統領 さらなる攻撃示唆</em>
+📰 NHK World | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: NHK World
+12日，伊朗发布了据称是新任最高领导人莫杰塔巴·哈梅内伊的首份声明，强调了对美国和以色列采取彻底抗战的立场。另一方面，美国总统特朗普在社交媒体发文严厉谴责伊朗领导层，并表示“看今天会发生什么”，暗示将发动进一步攻击。</p>
+</blockquote>
+<h3>3. <a href="http://www3.nhk.or.jp/news/html/20260313/k10015074741000.html">港未来线恢复运行 东急东横线预计在晚上9点半以后恢复</a></h3>
+<p><em>みなとみらい線が運転再開 東急東横線は午後9時半以降か</em>
+📰 NHK World | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: NHK World
+13日中午过后，横滨市内的东急东横线和港未来线部分区间发生停电，其中东横线的横滨站至菊名站区间已持续停运约8小时。东急电铁正在对无法行驶的列车进行移动作业，争取在晚上9点半以后恢复运行。</p>
+</blockquote>
+<h3>4. <a href="http://www3.nhk.or.jp/news/html/20260313/k10015075211000.html">柏崎刈羽核电站6号机组宣布停止发电输电，反应堆无异常。</a></h3>
+<p><em>柏崎刈羽原発6号機で発送電停止させると発表 原子炉に異常なし</em>
+📰 NHK World | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: NHK World
+东京电力公司宣布，关于今年1月重启的位于新潟县的柏崎刈羽核电站6号机组，12日下午响起了显示发电机存在微量漏电的警报。由于需要详细调查</p>
+</blockquote>
+<h3>5. <a href="http://www3.nhk.or.jp/news/html/20260313/k10015075291000.html">男子被控殴打女友1岁孩子 大阪地方法院判其无罪</a></h3>
+<p><em>交際相手の1歳児暴行の罪に問われた男性に無罪判決 大阪地裁</em>
+📰 NHK World | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: NHK World
+在一 flash名男子被控对交往对象的1岁儿子施暴的审判中，大阪地方法院不认可调查阶段制作的自白笔录的可信度，判决该男子无罪。</p>
+</blockquote>
+<h3>6. <a href="https://www.scmp.com/news/china/science/article/3346507/could-chinas-gallium-oxide-leap-leave-us-f-22-radar-2-generations-behind?utm_source=rss_feed">中国在氧化镓领域的飞跃是否会让美国F-22雷达落后两代？</a></h3>
+<p><em>Could China’s gallium oxide leap leave US F-22 radar 2 generations behind?</em>
+📰 SCMP China | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: SCMP China
+在激烈的雷达霸权争夺战中，随着上个月公布的一项有望重新定义军事电子设备未来的半导体技术取得进展，中国可能会领先美国整整两代。与此同时，美国空军正艰难地对其战斗机进行现代化改造。</p>
+</blockquote>
+<h3>7. <a href="https://www.scmp.com/news/china/diplomacy/article/3346526/beijing-warns-us-over-jimmy-lai-hong-kong-and-taiwan-arms-sales-ahead-trump-visit?utm_source=rss_feed">特朗普访问前，北京就黎智英、香港及对台军售问题警告美国。</a></h3>
+<p><em>Beijing warns US over Jimmy Lai, Hong Kong and Taiwan arms sales ahead of Trump visit</em>
+📰 SCMP China | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: SCMP China
+北京周五警告华盛顿，在本月晚些时候美国总统唐纳德·特朗普访问之前，不要采取涉及香港或台湾的举动。中方谴责了美国要求释放被囚的前香港媒体大亨黎智英的呼吁，并重申反对美方...</p>
+</blockquote>
+<h3>8. <a href="https://www.scmp.com/economy/global-economy/article/3346499/japan-taps-oil-reserves-iran-war-spreads-could-it-give-china-leverage?utm_source=rss_feed">随着伊朗战事蔓延，日本动用石油储备。这会给中国带来筹码吗？</a></h3>
+<p><em>Japan taps oil reserves as Iran war spreads. Could it give China leverage?</em>
+📰 SCMP China | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: SCMP China
+分析人士认为，日本单方面决定释放紧急石油储备，凸显了其在长期供应中断面前的脆弱性，并可能在双边关系紧张之际，使其更容易受到来自中国的经济压力。东京方面于本周早些时候宣布，计划……</p>
+</blockquote>
+<h3>9. <a href="https://www.scmp.com/news/china/science/article/3346434/death-chinese-scientist-li-xinying-48-egypt-raises-sharp-questions-back-home?utm_source=rss_feed">48岁中国科学家李新颖在埃及身亡，在国内引发强烈质疑。</a></h3>
+<p><em>Death of Chinese scientist Li Xinying, 48, in Egypt raises sharp questions back home</em>
+📰 SCMP China | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: SCMP China
+中国著名遗传心理学家李新影在埃及旅游期间猝然离世，由于官方对其死因的解释依然模糊且在医学上尚无定论，此事在中国引发了日益增长的关注与猜测。48岁的李新影是中国科学院的研究员、博士生导师...</p>
+</blockquote>
+<h3>10. <a href="https://www.scmp.com/business/banking-finance/article/3346495/first-china-neuracles-implantable-brain-computer-interface-wins-approval?utm_source=rss_feed">中国首例：博睿康植入式脑机接口获批。</a></h3>
+<p><em>In a first for China, Neuracle’s implantable brain-computer interface wins approval</em>
+📰 SCMP China | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: SCMP China
+在一项具有里程碑意义的进展中，博睿康（Neuracle Medical Technology）获得了国内首个植入式脑机接口（BCI）系统的批准，该系统旨在</p>
+</blockquote>
+<h2>📖 深度分析 (Analysis &amp; Opinion)</h2>
+<blockquote>
+<p>📊 <strong>板块速览：</strong> 今日深度分析板块聚焦中东与美国外交安全议题，涵盖伊朗核危机背景下霍尔木兹海峡的战略博弈、伊朗最高领袖继承问题，以及美以两国借助人工智能软件强化军事打击目标系统的最新进展。与此同时，板块亦关注西半球局势，探讨拉丁美洲内部分歧如何为美国介入委内瑞拉提供契机。此外，印度在全球秩序动荡加剧背景下的战略处境也受到关注，折射出新兴大国应对美国不确定性政策时的现实压力。</p>
+</blockquote>
+<h3>1. <a href="https://www.foreignaffairs.com/iran/hormuz-minefield">霍尔木兹雷区</a></h3>
+<p><em>The Hormuz Minefield</em>
+📰 Foreign Affairs | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Foreign Affairs
+在海峡局势中，伊朗占据优势，而美国并无良策。</p>
+</blockquote>
+<h3>2. <a href="https://www.foreignaffairs.com/iran/new-khamenei">新的哈梅内伊</a></h3>
+<p><em>The New Khamenei</em>
+📰 Foreign Affairs | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Foreign Affairs
+美国和以色列如何解决了伊朗的继任问题。</p>
+</blockquote>
+<h3>3. <a href="https://www.foreignaffairs.com/venezuela/how-latin-america-failed-venezuela">拉丁美洲是如何辜负委内瑞拉的</a></h3>
+<p><em>How Latin America Failed Venezuela</em>
+📰 Foreign Affairs | 📅 Fri, 13 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: Foreign Affairs
+该地区的分歧促成了美国的干预。</p>
+</blockquote>
+<h3>4. <a href="https://www.economist.com/international/2026/03/11/how-america-and-israel-built-vast-military-targeting-machines">美国与以色列如何打造庞大的军事目标打击体系</a></h3>
+<p><em>How America and Israel built vast military targeting machines</em>
+📰 The Economist | 📅 Wed, 11 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: The Economist
+软件正极大加速寻找轰炸目标的过程。</p>
+</blockquote>
+<h3>5. <a href="https://www.economist.com/international/2026/03/10/india-has-much-to-lose-from-a-world-in-chaos">印度在动荡的世界中损失巨大。</a></h3>
+<p><em>India has much to lose from a world in chaos</em>
+📰 The Economist | 📅 Tue, 10 Mar 2026 | 🔁 1源/1条 | 🆕 新出现</p>
+<blockquote>
+<p>来源覆盖: The Economist
+不久前，印度在应对变幻莫测的美国时还颇为自得。如今已不再如此。</p>
+</blockquote></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+(function () {
+  const historyMenu = document.getElementById('history-menu');
+  fetch(ARCHIVE_BASE + '/index.json')
+    .then((res) => res.json())
+    .then((dates) => {
+      historyMenu.innerHTML = '';
+      if (!Array.isArray(dates) || dates.length === 0) {
+        historyMenu.innerHTML = '<li><span class="dropdown-item-text text-muted">暂无历史</span></li>';
+        return;
+      }
+      dates.forEach((d) => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.className = 'dropdown-item';
+        a.href = ARCHIVE_BASE + '/' + d + '.html';
+        a.textContent = d;
+        li.appendChild(a);
+        historyMenu.appendChild(li);
+      });
+    })
+    .catch(() => {
+      historyMenu.innerHTML = '<li><span class="dropdown-item-text text-danger">加载失败</span></li>';
+    });
+
+  const raw = document.getElementById('raw-content');
+  const nodes = Array.from(raw.children);
+  const sections = [];
+  let currentSection = null;
+
+  for (const node of nodes) {
+    if (node.tagName === 'H2') {
+      currentSection = { title: node.innerHTML, leadNodes: [], articles: [] };
+      sections.push(currentSection);
+      continue;
+    }
+
+    if (!currentSection) {
+      continue;
+    }
+
+    if (node.tagName === 'H3') {
+      currentSection.articles.push({ titleNode: node, nodes: [] });
+      continue;
+    }
+
+    if (currentSection.articles.length === 0) {
+      currentSection.leadNodes.push(node);
+    } else {
+      currentSection.articles[currentSection.articles.length - 1].nodes.push(node);
+    }
+  }
+
+  const desktopNav = document.getElementById('desktop-nav');
+  const mobileNav = document.getElementById('mobile-nav');
+  const main = document.getElementById('main-content');
+  const navCanvasEl = document.getElementById('sectionNavCanvas');
+  const navCanvas = navCanvasEl ? bootstrap.Offcanvas.getOrCreateInstance(navCanvasEl) : null;
+
+  const labelMap = {
+    '🏛': '政治外交',
+    '💹': '经济金融',
+    '⚔': '军事安全',
+    '🌱': '社会人文',
+    '🌏': '亚洲焦点',
+    '📖': '深度分析',
+    '🧪': '质量指标'
+  };
+
+  function shortLabel(title) {
+    for (const [emoji, text] of Object.entries(labelMap)) {
+      if (title.includes(emoji)) return emoji + ' ' + text;
+    }
+    return title.replace(/<[^>]+>/g, '').trim().slice(0, 12);
+  }
+
+  function scrollToTarget(targetId) {
+    const section = document.getElementById(targetId);
+    if (!section) return;
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function createNavLink(targetId, title, mobile) {
+    const a = document.createElement('a');
+    a.href = '#' + targetId;
+    a.className = mobile ? 'list-group-item list-group-item-action nav-item-link' : 'list-group-item list-group-item-action nav-item-link';
+    a.textContent = shortLabel(title);
+    a.dataset.target = targetId;
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (mobile && navCanvasEl && navCanvas && navCanvasEl.classList.contains('show')) {
+        const onHidden = () => {
+          setTimeout(() => scrollToTarget(targetId), 30);
+        };
+        navCanvasEl.addEventListener('hidden.bs.offcanvas', onHidden, { once: true });
+        navCanvas.hide();
+        return;
+      }
+      scrollToTarget(targetId);
+    });
+    return a;
+  }
+
+  sections.forEach((sec, idx) => {
+    const sectionId = 'sec-' + idx;
+
+    const section = document.createElement('section');
+    section.className = 'section';
+    section.id = sectionId;
+
+    const heading = document.createElement('h2');
+    heading.className = 'section-head';
+    heading.innerHTML = sec.title;
+    section.appendChild(heading);
+
+    if (sec.leadNodes.length > 0) {
+      const summaryCard = document.createElement('div');
+      summaryCard.className = 'summary-card panel p-3 mb-3';
+      sec.leadNodes.forEach((node) => {
+        const p = document.createElement('div');
+        p.className = 'mb-2';
+        p.innerHTML = node.innerHTML;
+        summaryCard.appendChild(p);
+      });
+      section.appendChild(summaryCard);
+    }
+
+    if (sec.articles.length === 0 && sec.leadNodes.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'panel p-3 text-secondary';
+      empty.textContent = '暂无数据';
+      section.appendChild(empty);
+    }
+
+    sec.articles.forEach((art) => {
+      const card = document.createElement('article');
+      card.className = 'article-card p-3 p-md-4';
+
+      const titleRow = document.createElement('div');
+      titleRow.className = 'd-flex align-items-start justify-content-between gap-2';
+
+      const title = document.createElement('h3');
+      title.className = 'h5 mb-2 article-title';
+      title.innerHTML = art.titleNode.innerHTML;
+
+      const shareBtn = document.createElement('button');
+      shareBtn.className = 'btn btn-sm btn-outline-secondary';
+      shareBtn.textContent = '分享';
+
+      titleRow.appendChild(title);
+      titleRow.appendChild(shareBtn);
+      card.appendChild(titleRow);
+
+      let metaAdded = false;
+      let firstSummary = '';
+
+      art.nodes.forEach((node) => {
+        const text = (node.textContent || '').trim();
+
+        if (node.tagName === 'P' && text.includes('📰')) {
+          const metaLine = text.split('
+').find(l => l.includes('📰')) || text;
+          const parts = metaLine.split('|').map(s => s.trim()).filter(Boolean);
+          let source = '', date = '', count = '', trend = '';
+          parts.forEach(p => {
+            if (p.includes('📰')) source = p.replace('📰', '').trim();
+            else if (p.includes('📅')) date = p.replace('📅', '').trim();
+            else if (p.includes('🔁')) count = p.replace('🔁', '').trim();
+            else if (p.includes('🆕') || p.includes('新出现') || p.includes('持续') || p.includes('热度')) trend = p;
+          });
+
+          const row1 = document.createElement('div');
+          row1.className = 'meta-row';
+          if (source) {
+            const s = document.createElement('span');
+            s.className = 'meta-source';
+            s.textContent = source;
+            row1.appendChild(s);
+          }
+          if (trend) {
+            const b = document.createElement('span');
+            b.className = 'meta-badge';
+            b.textContent = trend;
+            row1.appendChild(b);
+          }
+
+          const row2 = document.createElement('div');
+          row2.className = 'meta-row';
+          const secondary = [date, count].filter(Boolean).join(' · ');
+          if (secondary) {
+            const s = document.createElement('span');
+            s.className = 'meta-secondary';
+            s.textContent = secondary;
+            row2.appendChild(s);
+          }
+
+          const wrap = document.createElement('div');
+          wrap.className = 'mb-2';
+          wrap.appendChild(row1);
+          if (secondary) wrap.appendChild(row2);
+          card.appendChild(wrap);
+          metaAdded = true;
+          return;
+        }
+
+        if (node.tagName === 'BLOCKQUOTE') {
+          const q = document.createElement('div');
+          q.className = 'article-quote';
+          q.innerHTML = node.innerHTML;
+          card.appendChild(q);
+          if (!firstSummary) firstSummary = text;
+          return;
+        }
+
+        if (node.tagName === 'P') {
+          const p = document.createElement('p');
+          p.className = 'article-summary mb-2';
+          p.innerHTML = node.innerHTML;
+          card.appendChild(p);
+          if (!firstSummary) firstSummary = text;
+          return;
+        }
+
+        const generic = document.createElement('div');
+        generic.className = 'article-summary mb-2';
+        generic.innerHTML = node.outerHTML;
+        card.appendChild(generic);
+      });
+
+      if (!metaAdded) {
+        const fallbackMeta = document.createElement('div');
+        fallbackMeta.className = 'meta-row mb-2';
+        const s = document.createElement('span');
+        s.className = 'meta-source';
+        s.textContent = '📰 元信息缺失';
+        fallbackMeta.appendChild(s);
+        card.appendChild(fallbackMeta);
+      }
+
+      shareBtn.addEventListener('click', async () => {
+        const titleText = title.textContent.trim();
+        const articleLink = title.querySelector('a');
+        const articleUrl = articleLink ? articleLink.href : '';
+        const pageUrl = window.location.href.split('#')[0];
+        const shareUrl = articleUrl || pageUrl;
+        const shareText = [
+          `【${titleText}】`,
+          firstSummary || '',
+          `链接：${shareUrl}`
+        ].filter(Boolean).join('\n');
+
+        try {
+          if (navigator.share) {
+            await navigator.share({ title: titleText, text: shareText, url: shareUrl });
+          } else {
+            await navigator.clipboard.writeText(shareText);
+          }
+          shareBtn.textContent = '已复制';
+          setTimeout(() => { shareBtn.textContent = '分享'; }, 1200);
+        } catch (_) {}
+      });
+
+      section.appendChild(card);
+    });
+
+    main.appendChild(section);
+    desktopNav.appendChild(createNavLink(sectionId, sec.title, false));
+    mobileNav.appendChild(createNavLink(sectionId, sec.title, true));
+  });
+
+  const desktopLinks = Array.from(desktopNav.querySelectorAll('.nav-item-link'));
+  const sectionEls = Array.from(document.querySelectorAll('.section'));
+
+  if (sectionEls.length > 0 && desktopLinks.length > 0) {
+    desktopLinks[0].classList.add('active');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        desktopLinks.forEach((l) => l.classList.remove('active'));
+        const target = desktopLinks.find((l) => l.dataset.target === entry.target.id);
+        if (target) target.classList.add('active');
+      });
+    }, { rootMargin: '-20% 0px -70% 0px', threshold: 0.02 });
+
+    sectionEls.forEach((el) => observer.observe(el));
+  }
+})();
+</script>
+</body>
+</html>
