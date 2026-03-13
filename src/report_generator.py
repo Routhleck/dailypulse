@@ -204,11 +204,6 @@ def _render_section(items, limit, translations, section_key, section_summary="",
 
         lines.append(meta)
 
-        if event_mode:
-            sources = item.get("sources", [])
-            if sources:
-                lines.append(f"> {'来源: , '.join(sources[:6])} |")
-
         if display_summary:
             lines.append(f"> {' '.join(display_summary.split())}")
         lines.append("")
