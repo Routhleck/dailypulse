@@ -64,6 +64,7 @@ jobs:
 
       - name: Build Pages
         run: |
+          set -e
           DATE=$(date -u +%Y-%m-%d)
           python scripts/generate_pages.py
 
