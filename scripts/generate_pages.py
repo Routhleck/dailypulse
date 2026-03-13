@@ -209,16 +209,16 @@ page = f"""<!DOCTYPE html>
     color: var(--dp-accent);
   }}
 
-  .meta-pill {{
-    display: inline-flex;
-    align-items: center;
-    border: 1px solid var(--dp-border);
-    border-radius: 999px;
-    padding: 0.15rem 0.56rem;
-    font-size: 0.76rem;
-    color: var(--dp-muted);
-    background: color-mix(in srgb, var(--dp-card) 70%, transparent);
+  .meta-row {{ display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-bottom: 0.15rem; }}
+  .meta-source {{ font-size: 0.82rem; font-weight: 600; color: var(--dp-text); }}
+  .meta-badge {{
+    display: inline-flex; align-items: center;
+    border-radius: 999px; padding: 0.1rem 0.5rem;
+    font-size: 0.72rem; font-weight: 600;
+    background: color-mix(in srgb, var(--dp-accent) 15%, transparent);
+    color: var(--dp-accent); border: 1px solid color-mix(in srgb, var(--dp-accent) 30%, transparent);
   }}
+  .meta-secondary {{ font-size: 0.76rem; color: var(--dp-muted); }}
 
   .article-quote {{
     border-left: 3px solid var(--dp-accent);
@@ -493,14 +493,44 @@ page = f"""<!DOCTYPE html>
         const text = (node.textContent || '').trim();
 
         if (node.tagName === 'P' && text.startsWith('📰')) {{
-          const wrap = document.createElement('div');
-          wrap.className = 'd-flex flex-wrap gap-2 mb-2';
-          text.split('|').map(s => s.trim()).filter(Boolean).forEach((part) => {{
-            const pill = document.createElement('span');
-            pill.className = 'meta-pill';
-            pill.textContent = part;
-            wrap.appendChild(pill);
+          const parts = text.split('|').map(s => s.trim()).filter(Boolean);
+          let source = '', date = '', count = '', trend = '';
+          parts.forEach(p => {{
+            if (p.startsWith('📰')) source = p.replace('📰', '').trim();
+            else if (p.startsWith('📅')) date = p.replace('📅', '').trim();
+            else if (p.startsWith('🔁')) count = p.replace('🔁', '').trim();
+            else if (p.startsWith('🆕') || p.includes('新出现') || p.includes('持续') || p.includes('热度')) trend = p;
           }});
+
+          const row1 = document.createElement('div');
+          row1.className = 'meta-row';
+          if (source) {{
+            const s = document.createElement('span');
+            s.className = 'meta-source';
+            s.textContent = source;
+            row1.appendChild(s);
+          }}
+          if (trend) {{
+            const b = document.createElement('span');
+            b.className = 'meta-badge';
+            b.textContent = trend;
+            row1.appendChild(b);
+          }}
+
+          const row2 = document.createElement('div');
+          row2.className = 'meta-row';
+          const secondary = [date, count].filter(Boolean).join(' · ');
+          if (secondary) {{
+            const s = document.createElement('span');
+            s.className = 'meta-secondary';
+            s.textContent = secondary;
+            row2.appendChild(s);
+          }}
+
+          const wrap = document.createElement('div');
+          wrap.className = 'mb-2';
+          wrap.appendChild(row1);
+          if (secondary) wrap.appendChild(row2);
           card.appendChild(wrap);
           metaAdded = true;
           return;
@@ -532,11 +562,11 @@ page = f"""<!DOCTYPE html>
 
       if (!metaAdded) {{
         const fallbackMeta = document.createElement('div');
-        fallbackMeta.className = 'd-flex flex-wrap gap-2 mb-2';
-        const pill = document.createElement('span');
-        pill.className = 'meta-pill';
-        pill.textContent = '📰 元信息缺失';
-        fallbackMeta.appendChild(pill);
+        fallbackMeta.className = 'meta-row mb-2';
+        const s = document.createElement('span');
+        s.className = 'meta-source';
+        s.textContent = '📰 元信息缺失';
+        fallbackMeta.appendChild(s);
         card.appendChild(fallbackMeta);
       }}
 
