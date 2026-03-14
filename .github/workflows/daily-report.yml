@@ -33,7 +33,7 @@ jobs:
       - name: Restore history DB from Pages
         run: |
           mkdir -p .state
-          curl -fsSL "https://sichaohe.github.io/Intel_Briefing/data/dailypulse.db" \
+          curl -fsSL "http://routhleck.com/dailypulse/data/dailypulse.db" \
             -o .state/dailypulse.db 2>/dev/null || true
           if [ -f .state/dailypulse.db ] && [ -s .state/dailypulse.db ]; then
             echo "DB restored: $(du -sh .state/dailypulse.db | cut -f1)"
@@ -77,14 +77,14 @@ jobs:
           # Fetch existing archives from deployed Pages
           mkdir -p /tmp/pages/archive
           mkdir -p /tmp/pages/data
-          curl -fsSL "https://sichaohe.github.io/Intel_Briefing/archive/index.json" \
+          curl -fsSL "http://routhleck.com/dailypulse/archive/index.json" \
             -o /tmp/pages/archive/index.json 2>/dev/null || true
           if [ -f /tmp/pages/archive/index.json ]; then
             python3 -c 'import json; dates=json.load(open("/tmp/pages/archive/index.json")); [print(d) for d in dates]' 2>/dev/null \
               > /tmp/archive_dates.txt || true
             while read d; do
               [ "$d" = "$DATE" ] && continue
-              curl -fsSL "https://sichaohe.github.io/Intel_Briefing/archive/${d}.html" \
+              curl -fsSL "http://routhleck.com/dailypulse/archive/${d}.html" \
                 -o "/tmp/pages/archive/${d}.html" 2>/dev/null || true
             done < /tmp/archive_dates.txt
           fi
