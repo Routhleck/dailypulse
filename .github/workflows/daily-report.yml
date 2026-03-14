@@ -80,17 +80,13 @@ jobs:
           curl -fsSL "https://sichaohe.github.io/Intel_Briefing/archive/index.json" \
             -o /tmp/pages/archive/index.json 2>/dev/null || true
           if [ -f /tmp/pages/archive/index.json ]; then
-            python3 -c "
-import json
-try:
-    dates = json.load(open('/tmp/pages/archive/index.json'))
-    for d in dates: print(d)
-except: pass
-" | while read d; do
-              [ "\$d" = "\$DATE" ] && continue
-              curl -fsSL "https://sichaohe.github.io/Intel_Briefing/archive/\${d}.html" \
-                -o "/tmp/pages/archive/\${d}.html" 2>/dev/null || true
-            done
+            python3 -c 'import json; dates=json.load(open("/tmp/pages/archive/index.json")); [print(d) for d in dates]' 2>/dev/null \
+              > /tmp/archive_dates.txt || true
+            while read d; do
+              [ "$d" = "$DATE" ] && continue
+              curl -fsSL "https://sichaohe.github.io/Intel_Briefing/archive/${d}.html" \
+                -o "/tmp/pages/archive/${d}.html" 2>/dev/null || true
+            done < /tmp/archive_dates.txt
           fi
 
           # Copy new files
