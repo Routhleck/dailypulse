@@ -126,36 +126,36 @@ def _summarize_sections(section_meta: list) -> dict:
     return results
 
 
-def _render_metrics(metrics: dict) -> List[str]:
-    lines: List[str] = ["## 🧪 质量指标 (Quality Metrics)", ""]
-
+def _render_summary_card(metrics: dict, date_str: str) -> List[str]:
     section_counts = metrics.get("section_counts", {})
-    lines.append(
-        "> 📈 采集总数: {raw} | 去重后条目: {dedup} | 事件数: {events} | 去重率: {rate}%".format(
+    trend_counts = metrics.get("trend_counts", {})
+    translation_rate = metrics.get("translation_rate", 0)
+
+    lines: List[str] = [
+        "> 📅 {date} | 采集 {raw} 条 → 去重 {dedup} 条 → 事件 {events} 个 | 翻译成功率 {rate}%".format(
+            date=date_str,
             raw=metrics.get("total_raw", 0),
             dedup=metrics.get("total_dedup", 0),
             events=metrics.get("total_events", 0),
-            rate=metrics.get("dedup_rate", 0),
-        )
-    )
-    lines.append(
-        "> 🌐 翻译任务: {total} | 翻译成功: {ok} | 翻译成功率: {rate}%".format(
-            total=metrics.get("translation_total", 0),
-            ok=metrics.get("translation_success", 0),
-            rate=metrics.get("translation_rate", 0),
-        )
-    )
-    lines.append(
-        "> 📚 板块产出: 政治 {politics} · 经济 {economics} · 军事 {military} · 社会 {society} · 亚洲 {asia} · 分析 {analysis}".format(
+            rate=translation_rate,
+        ),
+        "> 📊 板块：政治 {politics} · 经济 {economics} · 军事 {military} · 社会 {society} · 亚洲 {asia} · 分析 {analysis}".format(
             politics=section_counts.get("politics", 0),
             economics=section_counts.get("economics", 0),
             military=section_counts.get("military", 0),
             society=section_counts.get("society", 0),
             asia=section_counts.get("asia", 0),
             analysis=section_counts.get("analysis", 0),
-        )
-    )
-    lines.append("")
+        ),
+        "> 🏷️ 趋势：🆕 {new} · 🔥 {heating} · ⬇️ {cooling} · ➡️ {steady} · 🚨 {spike}".format(
+            new=trend_counts.get("new", 0),
+            heating=trend_counts.get("heating", 0),
+            cooling=trend_counts.get("cooling", 0),
+            steady=trend_counts.get("steady", 0),
+            spike=trend_counts.get("spike", 0),
+        ),
+        "",
+    ]
     return lines
 
 
@@ -257,7 +257,7 @@ def generate_report(
     ]
 
     if metrics:
-        lines.extend(_render_metrics(metrics))
+        lines.extend(_render_summary_card(metrics, date_str))
 
     for key, heading, limit in sections:
         lines.append(f"## {heading}")

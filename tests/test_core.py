@@ -258,6 +258,76 @@ class TestQualityMetrics:
         assert metrics["total_dedup"] == 2
         assert metrics["total_events"] == 1
         assert metrics["section_counts"]["politics"] == 1
+        assert "trend_counts" in metrics
+
+    def test_build_quality_metrics_trend_counts(self):
+        from src.event_processor import build_quality_metrics
+
+        raw_intel = {k: [] for k in SECTIONS}
+        events = {k: [] for k in SECTIONS}
+        events["politics"] = [
+            {"event_id": "a", "trend": "🆕 新出现"},
+            {"event_id": "b", "trend": "🔥 持续发酵"},
+            {"event_id": "c", "trend": "🚨 突发"},
+        ]
+
+        metrics = build_quality_metrics(raw_intel, events)
+        tc = metrics["trend_counts"]
+        assert tc["new"] == 1
+        assert tc["heating"] == 1
+        assert tc["spike"] == 1
+        assert tc["cooling"] == 0
+
+    def test_classify_trends_spike(self, tmp_path):
+        from src.event_processor import classify_trends
+        from src.history_repo import HistoryRepo
+
+        db_path = str(tmp_path / "pulse.db")
+        repo = HistoryRepo(db_path)
+
+        # Save two historical days with mention_count=2 each → avg=2
+        for day, run_date in [("2026-01-01", "2026-01-01"), ("2026-01-02", "2026-01-02")]:
+            hist = {k: [] for k in SECTIONS}
+            hist["politics"] = [{
+                "event_id": "pol_spike1",
+                "title": "Trade war escalates",
+                "title_norm": "trade war escalates",
+                "url": "https://example.com",
+                "summary": "",
+                "lang": "en",
+                "source": "Reuters",
+                "sources": ["Reuters"],
+                "source_count": 1,
+                "mention_count": 2,
+                "mentions": [],
+                "score": 0.5,
+                "trend": "🆕 新出现",
+            }]
+            m = {"total_raw": 2, "total_dedup": 2, "total_events": 1, "dedup_rate": 0.0,
+                 "translation_total": 0, "translation_success": 0, "translation_rate": 0.0,
+                 "section_counts": {k: 0 for k in SECTIONS}}
+            repo.save_day_snapshot(run_date, hist, m)
+
+        # Today: same event with mention_count=6 (≥ avg*2 = 4)
+        today = {k: [] for k in SECTIONS}
+        today["politics"] = [{
+            "event_id": "pol_spike1",
+            "title": "Trade war escalates",
+            "title_norm": "trade war escalates",
+            "url": "https://example.com",
+            "summary": "",
+            "lang": "en",
+            "source": "Reuters",
+            "sources": ["Reuters"],
+            "source_count": 1,
+            "mention_count": 6,
+            "mentions": [],
+            "score": 0.9,
+            "trend": "",
+        }]
+
+        classified = classify_trends(today, repo, run_date="2026-01-03")
+        assert "突发" in classified["politics"][0]["trend"]
 
 
 class TestReportGenerator:
@@ -279,7 +349,7 @@ class TestReportGenerator:
         assert "国际时事日报" in report
         assert "2026-01-01" in report
         assert "暂无数据" in report
-        assert "质量指标" in report
+        assert "趋势" in report
 
     def test_generate_report_with_event_data(self):
         from src.report_generator import generate_report
@@ -315,7 +385,7 @@ class TestReportGenerator:
         assert "UN Summit" in report
         assert "https://example.com" in report
         assert "持续发酵" in report
-        assert "质量指标" in report
+        assert "趋势" in report
 
 
 class TestSensorDataclasses:

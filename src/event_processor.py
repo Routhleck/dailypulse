@@ -87,6 +87,7 @@ _TREND_NEW = "🆕 新出现"
 _TREND_HEATING = "🔥 持续发酵"
 _TREND_COOLING = "⬇️ 降温"
 _TREND_STEADY = "➡️ 持续关注"
+_TREND_SPIKE = "🚨 突发"
 
 
 def _parse_pub_datetime(pub_date: str) -> Optional[dt.datetime]:
@@ -346,6 +347,14 @@ def classify_trends(
 
     for section, events in events_by_section.items():
         historical = history_repo.load_recent_events(section=section, run_date=run_date, days=7)
+
+        # Build per-event_id historical mention counts for spike detection
+        hist_mentions_by_id: Dict[str, List[int]] = {}
+        for row in historical:
+            eid = row.get("event_id", "")
+            if eid:
+                hist_mentions_by_id.setdefault(eid, []).append(int(row.get("mention_count", 0)))
+
         for event in events:
             match = _best_history_match(event, historical)
             if not match:
@@ -355,7 +364,13 @@ def classify_trends(
             prev_mentions = int(match.get("mention_count", 0))
             curr_mentions = int(event.get("mention_count", 0))
 
-            if curr_mentions > prev_mentions:
+            # Spike: current mentions >= 2× historical average (avg must be >= 2)
+            matched_id = match.get("event_id", "")
+            hist_counts = hist_mentions_by_id.get(matched_id, [prev_mentions])
+            hist_avg = sum(hist_counts) / len(hist_counts)
+            if hist_avg >= 2 and curr_mentions >= hist_avg * 2:
+                event["trend"] = _TREND_SPIKE
+            elif curr_mentions > prev_mentions:
                 event["trend"] = _TREND_HEATING
             elif curr_mentions < prev_mentions:
                 event["trend"] = _TREND_COOLING
@@ -394,6 +409,23 @@ def build_quality_metrics(
     if total_raw > 0:
         dedup_rate = round((1 - (total_dedup / total_raw)) * 100, 2)
 
+    # Count trend distribution across all events
+    trend_counts: Dict[str, int] = {
+        "new": 0, "heating": 0, "cooling": 0, "steady": 0, "spike": 0
+    }
+    _trend_map = {
+        _TREND_NEW: "new",
+        _TREND_HEATING: "heating",
+        _TREND_COOLING: "cooling",
+        _TREND_STEADY: "steady",
+        _TREND_SPIKE: "spike",
+    }
+    for events in events_by_section.values():
+        for event in events:
+            trend = event.get("trend", _TREND_NEW)
+            key = _trend_map.get(trend, "new")
+            trend_counts[key] += 1
+
     return {
         "total_raw": total_raw,
         "total_dedup": total_dedup,
@@ -403,5 +435,6 @@ def build_quality_metrics(
         "translation_success": 0,
         "translation_rate": 0.0,
         "section_counts": section_counts,
+        "trend_counts": trend_counts,
     }
 
